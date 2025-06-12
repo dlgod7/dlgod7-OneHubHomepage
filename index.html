@@ -21,6 +21,12 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Microsoft YaHei";
             background-color: #f0f2ff; color: var(--text-color); line-height: 1.6; overflow-x: hidden; position: relative; min-height: 100vh;
         }
+        /* === 新增: 滚动条美化 === */
+         ::-webkit-scrollbar { width: 8px; height: 8px; }
+         ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border-radius: 4px; margin-top: 5px; margin-bottom: 5px;}
+         ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, rgba(138, 43, 226, 0.7), rgba(0, 191, 255, 0.7)); border-radius: 4px; border: 1px solid rgba(255,255,255,0.3); box-shadow: inset 0 0 6px rgba(255,255,255,0.3);}
+         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(to bottom, rgba(0, 191, 255, 0.8), rgba(255, 105, 180, 0.8)); }
+
          .aura-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; filter: blur(90px); opacity: 0.85; }
         .aura-blob { position: absolute; border-radius: 50%; mix-blend-mode: overlay; animation: moveBlob 28s infinite alternate linear;}
         .aura-blob:nth-child(1) { width: 600px; height: 600px; background: rgba(168, 134, 250, 0.7); top: -10%; left: -10%;}
@@ -31,77 +37,131 @@
         @keyframes moveBlob { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(100px, -50px) scale(1.2); } 100% { transform: translate(-50px, 100px) scale(0.9); }}
         
         /* 容器和布局 */
-         .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; position: relative; z-index: 3;} /* Z-index 提升 */
-        main { padding-left: 100px; padding-top: 80px; padding-bottom: 40px; } /* 上下留白 */
-        section { margin-bottom: 100px; padding-top: 20px; }
+         .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; position: relative; z-index: 3;}
+        main { padding-left: 100px; padding-top: 80px; padding-bottom: 80px; /* 增加底部留白 */}
+        section { 
+            margin-bottom: 140px; /* 调整: 增加板块间距 */
+            padding-top: 20px; 
+            position: relative; /* 调整: 为装饰图定位 */
+            z-index: 3; /* 确保内容在装饰图之上 */
+         }
+         /* === 调整: 标题强化 === */
         section h2 {
-             text-align: center; margin-bottom: 60px; font-size: 2.3em; font-weight: 700; color: var(--primary-color);
+             text-align: center; 
+             margin-bottom: 70px; /* 调整: 增加与内容距离 */
+             font-size: 2.3em; font-weight: 700; color: var(--primary-color);
              background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
              -webkit-background-clip: text; -webkit-text-fill-color: transparent;
              text-shadow: 0 0 8px rgba(138, 43, 226, 0.3), 0 0 15px rgba(0, 191, 255, 0.2);
+             position: relative; /* 新增: 为伪元素定位 */
+             padding-bottom: 15px; /* 新增: 为装饰线留空间 */
+             display: inline-block; /* 新增 */
+             left: 50%; /* 新增 */
+             transform: translateX(-50%); /* 新增: 配合inline-block实现带线居中 */
         }
+         /* === 新增: 标题装饰线 === */
+        section h2::after {
+           content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+           width: 90px; height: 4px; border-radius: 2px;
+           background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+           box-shadow: 0 0 8px rgba(0, 191, 255, 0.6); opacity: 0.9;
+        }
+         
+         /* === 新增: 内容区装饰图 === */
+         .section-deco {
+            position: absolute; z-index: -1; /* 内容之下，光晕之上 */
+            pointer-events: none; max-width: 300px; mix-blend-mode: normal;
+            transition-delay: 0.5s !important; /* 晚于卡片出现 */
+            opacity: 0; transform: translateY(60px); transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform;
+         }
+          .section-deco.is-visible {
+              opacity: 0.40; /* 调整: 降低透明度，不干扰内容 */
+              transform: translateY(0); 
+          }
+          .section-deco img { width: 100%; height: auto; filter: blur(0.5px) brightness(1.1); }
+          /* 定位装饰图 */
+          .deco-1 { top: 20px; right: -60px; max-width: 280px; }
+          .deco-2 { top: 50%; left: -100px; transform: translateY(-40%) translateX(-60px); max-width: 250px;} /* 调整transform */
+           .deco-2.is-visible { transform: translateY(-40%) translateX(0); } /* 调整入场动画 */
+          .deco-3 { bottom: 10%; right: -80px; max-width: 320px;}
+
+
          /* 卡片和按钮 */
         .glass-card {
             background: var(--glass-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
             border-radius: 18px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow); padding: 30px;
-            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.4s ease; /* 调整: 增加box-shadow过渡 */
         }
-        .glass-card:hover { background: var(--glass-hover-bg); box-shadow: var(--card-shadow), 0 0 20px rgba(255,255,255, 0.3); }
-        .card-grid .glass-card:hover { transform: translateY(-8px); box-shadow: var(--card-shadow), 0 15px 30px rgba(99, 38, 188, 0.15), inset 0 0 15px rgba(255,255,255,0.5);}
+         /* 调整: 增强内发光 */
+        .glass-card:hover { background: var(--glass-hover-bg); box-shadow: var(--card-shadow), 0 0 20px rgba(255,255,255, 0.3), inset 0 0 15px rgba(255,255,255,0.6); }
+         /* 调整: 增强内发光 */
+        .card-grid .glass-card:hover { transform: translateY(-8px); box-shadow: var(--card-shadow), 0 15px 30px rgba(99, 38, 188, 0.18), inset 0 0 20px rgba(255,255,255,0.6);}
+        
         .glow-button {
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); color: white; padding: 12px 30px; border: none; border-radius: 50px;
             font-size: 1.1em; font-weight: 600; cursor: pointer; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-            animation: glow 3s infinite ease-in-out; margin: 0 10px; display: inline-block; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            animation: glow 3s infinite ease-in-out; margin: 0 10px; display: inline-block; text-shadow: 0 1px 2px rgba(0,0,0,0.2); position: relative; overflow: hidden;
+             /* 新增: 按钮光斑 */
+            background-image: radial-gradient( circle at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70% ), linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+             background-size: 200% 200%, 100% 100%;
+             background-position: center center;
+             background-repeat: no-repeat;
         }
-        .glow-button:hover { transform: scale(1.08); animation-play-state: paused; box-shadow: 0 0 20px var(--primary-color), 0 0 35px var(--secondary-color); background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));}
-        @keyframes glow { 0%, 100% { box-shadow: 0 0 8px rgba(138, 43, 226, 0.5); } 50% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(0, 191, 255, 0.5); }}
+         /* 调整: 按钮悬停光效 */
+        .glow-button:hover { 
+            transform: scale(1.08); animation-play-state: paused; 
+            box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color), inset 0 0 10px rgba(255,255,255,0.7); 
+            background-image: radial-gradient( circle at center, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 80% ), linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        }
+        /* 调整: 按钮呼吸光 */
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 10px rgba(138, 43, 226, 0.6); } 50% { box-shadow: 0 0 25px rgba(138, 43, 226, 0.9), 0 0 40px rgba(0, 191, 255, 0.6); }}
+       
         .scroll-reveal { opacity: 0; transform: translateY(60px); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform;}
         .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
         .card-grid .glass-card:nth-child(2) { transition-delay: 0.15s; }
         .card-grid .glass-card:nth-child(3) { transition-delay: 0.3s; }
-         /* 看板娘 */
-        .kanban-girl { position: fixed; left: 1.5vw; top: 50%; transform: translateY(-50%); z-index: 2; /* 稍微提高层级 */ pointer-events: none; transition: transform 0.05s linear; max-width: 180px; max-height: 70vh; will-change: transform;}
-        .kanban-girl img { width: 100%; height: auto; display: block; animation: girlGlow 6s infinite ease-in-out; }
-        @keyframes girlGlow { 0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)) drop-shadow(0 0 5px rgba(168, 134, 250, 0)); } 50% { filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 20px rgba(180, 134, 255, 0.7)); }}
         
+        /* === 看板娘 (左) === */
+        .kanban-girl { position: fixed; left: 1.5vw; top: 50%; transform: translateY(-50%); z-index: 2; pointer-events: none; transition: transform 0.1s linear; /* 调整: transition */ max-width: 180px; max-height: 70vh; will-change: transform;}
+        .kanban-girl img { width: 100%; height: auto; display: block; animation: girlGlowLeft 6s infinite ease-in-out; }
+        @keyframes girlGlowLeft { 0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)) drop-shadow(0 0 5px rgba(168, 134, 250, 0.1)); } 50% { filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 25px rgba(180, 134, 255, 0.8)); }}
+        
+        /* === 新增: 看板娘 (右) === */
+         .kanban-girl-right { position: fixed; right: 1vw; bottom: 5vh; /* 调整位置 */ transform: translateY(0%); z-index: 2; pointer-events: none; transition: transform 0.1s linear; max-width: 160px; max-height: 60vh; will-change: transform;}
+         .kanban-girl-right img { width: 100%; height: auto; display: block; animation: girlGlowRight 7s infinite ease-in-out; /* 调整: 动画时间和名称 */}
+         /* 新增: 右侧不同颜色光晕 */
+         @keyframes girlGlowRight { 0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)) drop-shadow(0 0 5px rgba(0, 255, 255, 0.1)); } 50% { filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 25px rgba(0, 220, 255, 0.8)); }}
+
+
         /* ===== 英雄区 - 全宽 & Ken Burns ===== */
         #hero {
              position: relative; height: 90vh; min-height: 550px; max-height: 900px; overflow: hidden;
-              width: 100%; /* 全宽 */
-              display: flex; align-items: center; justify-content: center; 
-              background-color: #e0e0ff; 
-              z-index: 1; /* 层级 */
-              padding: 0 20px; /* 左右留白 */
-               margin-bottom: 0; /* 移除外边距 */
+              width: 100%; display: flex; align-items: center; justify-content: center; 
+              background-color: #e0e0ff; z-index: 1; padding: 0 20px; margin-bottom: 0;
                border-bottom: 1px solid var(--glass-border);
         }
         .slider { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;}
          /* Ken Burns 效果 */
         .slide { 
            position: absolute; width: 100%; height: 100%; opacity: 0; 
-            /* 淡入淡出 1.5s, 缩放 9s */
-           transition: opacity 1.5s ease-in-out, transform 9s linear; 
-           transform: scale(1); /* 起始大小 */
-           visibility: hidden;
+           transition: opacity 1.5s ease-in-out, transform 9s linear; /* 淡入淡出 1.5s, 缩放 9s */
+           transform: scale(1); visibility: hidden;
          }
-        .slide.active { 
-           opacity: 1; 
-           transform: scale(1.18); /* 目标大小，缓慢放大 */
-           visibility: visible;
-         }
+        .slide.active { opacity: 1; transform: scale(1.18); visibility: visible;}
         .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9);}
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(240, 242, 255, 0.15); z-index: 2;}
+        /* 调整: overlay 增加模糊，更融合 */
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(240, 242, 255, 0.1); z-index: 2; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);}
          .hero-content-wrapper {
              max-width: var(--container-width); width: 100%;
-             display: flex; align-items: center; justify-content: center;
-              z-index: 4;
+             display: flex; align-items: center; justify-content: center; z-index: 4;
          }
          .hero-content {
             position: relative; text-align: center; padding: 40px 35px; max-width: 800px; margin: auto;
             background: var(--glass-bg-hero); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-radius: 18px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow); transition: background 0.3s ease, box-shadow 0.3s ease;
         }
-        .hero-content:hover { background: rgba(255, 255, 255, 0.30); box-shadow: var(--card-shadow), inset 0 0 15px rgba(255,255,255,0.5); }
+         /* 调整: 增强内发光 */
+        .hero-content:hover { background: rgba(255, 255, 255, 0.30); box-shadow: var(--card-shadow), inset 0 0 20px rgba(255,255,255,0.7); }
         .hero-content h1 { font-size: 4.5em; font-weight: 800; margin-bottom: 15px; color: var(--primary-color); text-shadow: 0px 0px 10px rgba(255,255,255,0.8), 2px 2px 5px rgba(0,0,0,0.1);}
         .hero-content .subtitle { font-size: 1.6em; color: var(--light-text-color); margin-bottom: 35px; min-height: 1.8em; font-weight: 500; text-shadow: 0px 0px 8px rgba(255,255,255,0.8), 1px 1px 3px rgba(0,0,0,0.1);}
         .cursor { display: inline-block; background-color: var(--secondary-color); margin-left: 2px; width: 3px; height: 1.1em; vertical-align: text-bottom; animation: blink 0.7s infinite;}
@@ -111,9 +171,9 @@
              border: 1px solid var(--glass-border); color: var(--primary-color); font-size: 2em; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; opacity: 0;
              transition: opacity 0.4s ease, background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; display: flex; align-items: center; justify-content: center; padding-bottom: 2px; user-select: none;
          }
-        .nav-arrow:hover { background: var(--glass-hover-bg); color: var(--accent-color); box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);}
+          /* 调整: 箭头悬停光效 */
+        .nav-arrow:hover { background: var(--glass-hover-bg); color: var(--accent-color); box-shadow: 0 0 15px rgba(255, 105, 180, 0.6), inset 0 0 8px white;}
         #hero:hover .nav-arrow { opacity: 0.9; }
-         /* 箭头位置调整 */
         .nav-arrow.prev { left: 3vw; padding-right: 3px;}
         .nav-arrow.next { right: 3vw; padding-left: 3px;}
         
@@ -126,12 +186,13 @@
             box-shadow: 0 4px 12px rgba(99, 38, 188, 0.08); pointer-events: none; opacity: 0.95;
          }
           /* 内容卡片和图标 */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 35px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 35px; position: relative; z-index: 5; /* 确保在装饰图上 */}
         .card-grid .glass-card { text-align: center; padding: 40px 25px; }
         .card-grid .fa-solid, .card-grid .fas {
               font-size: 2.8em; margin-bottom: 20px; color: var(--secondary-color);
               background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
               -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block;
+               text-shadow: 0 0 8px rgba(0, 191, 255, 0.3); /* 调整: 图标微光 */
         }
         .card-grid h3 { font-size: 1.5em; margin-bottom: 15px; color: var(--primary-color); }
         .card-grid p { font-size: 1em; color: var(--light-text-color);}
@@ -139,27 +200,33 @@
         .steps .step-number {
              position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 50px; height: 50px;
              background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border-radius: 50%; color: white; font-size: 1.5em; font-weight: bold; display: flex;
-             align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); border: 3px solid white;
+             align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); border: 3px solid rgba(255,255,255,0.8); /* 调整边框 */
         }
         .steps .fa-solid, .steps .fas { display: none;}
-         /* 表格 */
-        .table-container { padding: 20px 30px; overflow-x: auto;}
+
+         /* === 表格调整 === */
+        .table-container { padding: 20px 30px; overflow-x: auto; position: relative; z-index: 5;}
         .table-container h3 {
             margin-top: 45px; margin-bottom: 15px; color: var(--primary-color); font-size: 1.4em;
             border-bottom: 2px solid; border-image: linear-gradient(to right, var(--primary-color), var(--secondary-color), transparent) 1;
             padding-bottom: 8px; display: inline-block; padding-right: 20px;
         }
+         .table-container h3 i { color: var(--secondary-color) !important; text-shadow: 0 0 6px var(--secondary-color); } /* 调整: 图标颜色和光效 */
         .table-container h3:first-of-type { margin-top: 15px; }
         .table-note { margin-top: 25px; font-size: 0.9em; color: var(--light-text-color); text-align: right; font-style: italic; opacity: 0.9;}
-        table { width: 100%; border-collapse: separate; border-spacing: 0; background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-        th, td { padding: 12px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.3); font-size: 0.95em;}
-        th { background: rgba(255,255,255,0.25); color: var(--text-color); font-weight: 600; position: sticky; top: 0; font-size: 1em;}
+        table { width: 100%; border-collapse: separate; border-spacing: 0; background: rgba(255,255,255,0.1); /* 调整 */ border-radius: 10px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--glass-border); /* 新增 */ }
+        th, td { padding: 12px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); /* 调整 */ font-size: 0.95em;}
+         /* 调整: 表头亚克力 */
+        th { background: rgba(255,255,255,0.25); backdrop-filter: blur(5px); color: var(--text-color); font-weight: 600; position: sticky; top: 0; font-size: 1em; border-bottom: 1px solid var(--glass-border); text-shadow: 0 0 3px white;}
         tr:last-child td { border-bottom: none;}
-        tbody tr:hover { background: rgba(255,255,255,0.35); box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
-        td.price-col { font-weight: 600; color: var(--cyan-color); text-shadow: 0 0 4px rgba(0, 255, 255, 0.4); }
+        /* 调整: 悬停效果 */
+        tbody tr:hover { background: rgba(255,255,255,0.3); box-shadow: 0 0 15px rgba(138, 43, 226, 0.2), inset 0 0 10px rgba(255,255,255,0.5); }
+         /* 调整: 价格光效 */
+        td.price-col { font-weight: 600; color: var(--cyan-color); text-shadow: 0 0 8px rgba(0, 255, 255, 0.7); }
+
          /* 页脚和闪光字 */
         footer { text-align: center; padding: 40px 0 60px 0; margin-top: 40px; color: var(--light-text-color); font-size: 0.9em; position: relative; z-index: 3; 
-           border-top: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);}
+           border-top: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); /* 调整 */}
         footer .glass-card { display: inline-block; padding: 12px 35px; box-shadow: none; background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.2); transition: all 0.3s ease;
             box-shadow: var(--card-shadow); }
         footer .glass-card:hover { transform: none; background: rgba(255, 255, 255, 0.25); box-shadow: var(--card-shadow), inset 0 0 10px rgba(255,255,255,0.4);}
@@ -172,17 +239,25 @@
         @keyframes sparkleGlow { from { text-shadow: 0 0 2px #fff, 0 0 5px var(--primary-color); } to { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 15px var(--secondary-color); }}
         footer p { white-space: nowrap;}
 
-         /* 响应式 */
+         /* === 响应式调整 === */
+        @media (max-width: 1200px) { /* 新增: 提早隐藏装饰图 */
+           .section-deco { display: none; }
+           .kanban-girl-right { max-width: 120px; right: 0.5vw;}
+        }
         @media (max-width: 900px) {
             .kanban-girl { left: -50px; max-width: 120px; }
+            .kanban-girl-right { display: none; } /* 新增: 隐藏右侧 */
              main { padding-left: 20px; }
              .hero-content h1 { font-size: 3em;} .hero-content .subtitle { font-size: 1.2em;}
              .hero-content { padding: 30px;} .glow-button { padding: 10px 20px; font-size: 1em;}
              section h2 {font-size: 1.8em;} .table-container { padding: 15px;}
              th, td { padding: 10px 12px; font-size: 0.9em;} th { font-size: 0.95em;}
+             section { margin-bottom: 100px;} /* 恢复 */
         }
          @media (max-width: 600px) {
-             .kanban-girl { display: none;} main { padding-left: 0; padding-top: 40px; }
+             .kanban-girl { display: none;} 
+              .kanban-girl-right { display: none;} /* 确保隐藏 */
+             main { padding-left: 0; padding-top: 40px; padding-bottom: 40px; }
              #hero { height: 60vh; min-height: 450px; }
              .hero-content h1 { font-size: 2.5em; } .hero-content .subtitle { font-size: 1.1em; min-height: 2em; margin-bottom: 20px;}
              .hero-content { padding: 25px 15px; width: 100%; max-width: 95%; } 
@@ -190,10 +265,11 @@
              .glow-button { margin: 8px 0; width: 80%; font-size: 0.95em;}
              .nav-arrow { width: 35px; height: 35px; font-size: 1.4em; opacity: 0.7 !important;} 
              .nav-arrow.prev { left: 10px;} .nav-arrow.next { right: 10px;}
-             section { margin-bottom: 70px;} section h2 { margin-bottom: 50px;}
+             section { margin-bottom: 80px;} section h2 { margin-bottom: 50px; font-size: 1.7em;}
              .card-grid { gap: 50px 20px;} .card-grid .fa-solid, .card-grid .fas { font-size: 2.2em;}
              footer p { white-space: normal; line-height: 1.8;} .sparkle-text { display: inline-block; margin-top: 5px;}
              .creator-badge { bottom: 12px; right: 12px; font-size: 0.75em; padding: 4px 10px; }
+              ::-webkit-scrollbar { display: none; /* 小屏隐藏自定义滚动条 */ }
          }
     </style>
     <!-- CSS 样式结束 -->
@@ -203,12 +279,19 @@
     <div class="aura-background">
        <div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div>
     </div>
+    
+    <!-- 左侧看板娘 -->
     <div class="kanban-girl" id="kanbanGirl" data-scroll-speed="0.08">
-         <img src="https://816516.xyz/PicGo/%E4%B8%9B%E9%9B%A8%20(1).jpg" alt="OneHub 看板娘">
+         <img src="https://816516.xyz/PicGo/%E4%B8%9B%E9%9B%A8%20(1).jpg" alt="OneHub 看板娘 左">
      </div>
+     <!-- 新增: 右侧看板娘 -->
+     <div class="kanban-girl-right" id="kanbanGirlRight" data-scroll-speed="-0.04">
+        <img src="https://816516.xyz/PicGo/%E7%99%BD%E7%8E%89%C2%B7%E6%B0%B4%E7%8C%AB.jpg" alt="OneHub 看板娘 右">
+    </div>
 
-    <!-- 英雄区 - 结构调整为全宽 -->
-     <section id="hero" class="is-visible"> 
+
+    <!-- 英雄区 -->
+     <section id="hero" class="is-visible" style="margin-bottom: 80px;"> <!-- 减少英雄区下方间距 -->
          <div class="slider" id="sliderContainer">
               <div class="slide active"><img src="https://th.bing.com/th/id/R.f30fbf5ea4a1b2a57cb00f8d2eb1a3bd?rik=mAk2UYD%2fctcukw&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2f6b1305f9e98fe337a9896165d25a445b6a1072d2.jpg&ehk=jno%2fCsn8fiA6orsxa90I4dAgeDkCWFPjR%2fP4sO2%2fwTQ%3d&risl=&pid=ImgRaw&r=0" alt="背景图1 猫耳少女"></div>
               <div class="slide"><img src="https://th.bing.com/th/id/OIP.QkFLyvk8W4jtWzx9LDJE_QHaEo?pid=1.7" alt="背景图2 贴贴"></div>
@@ -217,7 +300,7 @@
                 <div class="slide"><img src="https://th.bing.com/th/id/OIP.Q8c0yVp9fbryo1vPTgHe5QHaEK?pid=1.7" alt="背景图5 海边烟花"></div>
          </div>
          <div class="hero-overlay"></div> 
-          <div class="hero-content-wrapper"> <!-- 内容居中容器 -->
+          <div class="hero-content-wrapper">
              <div class="hero-content">
                   <h1>OneHub</h1>
                   <p class="subtitle"><span id="typewriter"></span><span class="cursor"></span></p>
@@ -239,6 +322,10 @@
     <div class="container">
         <!-- 2. 核心优势 Features -->
          <section id="features" class="scroll-reveal">
+            <!-- 新增: 装饰图 -->
+             <div class="section-deco deco-1 scroll-reveal">
+                 <img src="https://img.qlqqs.com/b/2025/06/12/684ae7b9e1ab9.jpg" alt="装饰">
+             </div>
             <h2>核心优势</h2>
             <div class="card-grid">
                 <div class="glass-card"> <i class="fas fa-plug"></i><h3>统一访问</h3><p>兼容标准接口，一站式接入全球主流大语言模型、绘图模型，极大简化开发集成工作。</p></div>
@@ -248,6 +335,10 @@
          </section>
          <!-- 3. 快速上手 Quick Start -->
           <section id="quick-start" class="scroll-reveal">
+               <!-- 新增: 装饰图 -->
+             <div class="section-deco deco-2 scroll-reveal">
+                 <img src="https://img.qlqqs.com/b/2025/06/12/684ae7ba6ff5a.jpg" alt="装饰">
+             </div>
              <h2>快速上手</h2>
               <div class="card-grid steps">
                  <div class="glass-card"><span class="step-number">1</span><i class="fas fa-user-plus"></i><h3>注册登录</h3><p>快速创建或登录您的 OneHub 账户，进入控制台。</p></div>
@@ -257,9 +348,13 @@
           </section>
            <!-- 4. 模型支持 Model Support -->
         <section id="models" class="scroll-reveal">
+              <!-- 新增: 装饰图 -->
+            <div class="section-deco deco-3 scroll-reveal">
+                 <img src="https://img.qlqqs.com/b/2025/06/12/684ae7bba52da.jpg" alt="装饰">
+             </div>
              <h2>模型支持与定价 (2025年6月)</h2>
             <div class="glass-card table-container">
-                <h3><i class="fas fa-keyboard" style="margin-right: 8px; color: var(--primary-color);"></i>文本生成模型</h3>
+                <h3><i class="fas fa-keyboard" style="margin-right: 8px;"></i>文本生成模型</h3>
                 <table>
                     <thead><tr><th>模型ID</th><th>输入价格</th><th>输出价格</th></tr></thead>
                      <tbody>
@@ -271,7 +366,7 @@
                            <tr><td>kingfall-preview-06-09 (Google)</td><td class="price-col">$2.50/百万*</td><td class="price-col">$12.50/百万*</td></tr>
                      </tbody>
                 </table>
-                 <h3><i class="fas fa-image" style="margin-right: 8px; color: var(--primary-color);"></i>图像生成模型</h3>
+                 <h3><i class="fas fa-image" style="margin-right: 8px;"></i>图像生成模型</h3>
                  <table>
                     <thead><tr><th>模型ID</th><th>价格（分辨率≥1024px）</th></tr></thead>
                      <tbody>
@@ -281,7 +376,7 @@
                          <tr><td>stable-diffusion-3-api</td><td class="price-col">$0.03/张</td></tr>
                      </tbody>
                   </table>
-                   <h3><i class="fas fa-music" style="margin-right: 8px; color: var(--primary-color);"></i>音频生成模型</h3>
+                   <h3><i class="fas fa-music" style="margin-right: 8px;"></i>音频生成模型</h3>
                    <table>
                        <thead><tr><th>模型ID</th><th>价格（标准质量）</th></tr></thead>
                         <tbody>
@@ -290,7 +385,7 @@
                              <tr><td>dia-1.6b-tts (开源)</td><td class="price-col">免费</td></tr>
                         </tbody>
                    </table>
-                   <h3><i class="fas fa-film" style="margin-right: 8px; color: var(--primary-color);"></i>视频生成模型</h3>
+                   <h3><i class="fas fa-film" style="margin-right: 8px;"></i>视频生成模型</h3>
                     <table>
                        <thead><tr><th>模型ID</th><th>价格（1080p/30fps）</th></tr></thead>
                        <tbody>
@@ -321,17 +416,23 @@
              const typewriterEl = document.getElementById('typewriter');
              const cursorEl = document.querySelector('.cursor');
               const kanbanGirl = document.getElementById('kanbanGirl');
-               const revealElements = document.querySelectorAll('.scroll-reveal');
+              const kanbanGirlRight = document.getElementById('kanbanGirlRight'); // 新增: 获取右侧看板娘
+               // 调整: 选择器包含 section-deco
+               const revealElements = document.querySelectorAll('.scroll-reveal'); 
 
+           // --- Slider Logic ---
            if(slides.length > 0 && prevBtn && nextBtn && heroSection) {
                 let currentIndex = 0;
                 let autoPlayInterval = null;
-                const autoPlayDelay = 7000; // 调整：7秒切换，匹配 Ken Burns
+                const autoPlayDelay = 7000;
                 const isMobile = window.innerWidth <= 600;
                 function showSlide(index) {
                     index = (index + slides.length) % slides.length; 
                     if (!slides[index]) return;
                     slides.forEach(slide => slide.classList.remove('active'));
+                     // 强制重绘以确保动画重新开始
+                    slides[index].style.transform = 'scale(1)';
+                    void slides[index].offsetWidth; 
                     slides[index].classList.add('active');
                     currentIndex = index;
                 }
@@ -352,7 +453,8 @@
                  startAutoPlay(); 
                  showSlide(0); 
             } 
-
+            
+            // --- Typewriter Logic ---
             if(typewriterEl && cursorEl) {
                  const phrases = ["统一访问主流 AI 模型", "极速稳定，弹性计费", "一键集成，简化开发流程"];
                  let phraseIndex = 0, charIndex = 0, isDeleting = false;
@@ -369,39 +471,72 @@
                     } else if (isDeleting && charIndex === 0) {
                          isDeleting = false; phraseIndex++; delay = 400;
                      }
-                     if(typewriterEl) setTimeout(type, delay);
+                    // 修复: 确保元素存在
+                     if(document.body.contains(typewriterEl)) setTimeout(type, delay);
                  }
                 setTimeout(type, 500); 
             }
 
+            // --- Scroll Reveal Logic ---
             if(revealElements.length > 0){
                  const revealObserver = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
+                         // 排除英雄区和特定装饰图的初始状态
                          if(entry.target.id === 'hero') return;
+                         // 仅对deco-2做特殊处理，因为它的transform不同
+                          const isDeco2 = entry.target.classList.contains('deco-2');
+                          const initialTransform = isDeco2 ? 'translateY(-40%) translateX(0)' : 'translateY(0)';
+
                         if (entry.isIntersecting) {
                              entry.target.classList.add('is-visible');
+                             // 确保deco-2动画正确
+                              if (isDeco2) {
+                                 entry.target.style.transform = initialTransform;
+                              }
                              observer.unobserve(entry.target); 
                         }
                     });
-                 }, { root: null, threshold: 0.05, rootMargin: "0px 0px -60px 0px" });
-                 revealElements.forEach(el => revealObserver.observe(el));
+                    // 调整: 触发点更早
+                 }, { root: null, threshold: 0.01, rootMargin: "0px 0px -80px 0px" });
+                 revealElements.forEach(el => {
+                    // 调整: 如果是deco-2，手动设置初始transform，否则transition不起作用
+                     if(el.classList.contains('deco-2')) {
+                         el.style.transform = 'translateY(-40%) translateX(-60px)';
+                     }
+                    revealObserver.observe(el)
+                });
             }
 
-             if (kanbanGirl) {
-                 const speed = parseFloat(kanbanGirl.dataset.scrollSpeed) || 0.08;
-                 const initialOffsetY = -50;
-                 window.addEventListener('scroll', () => {
-                    if(window.innerWidth > 600) {
-                       const scrollY = window.scrollY;
-                       requestAnimationFrame(() => {
-                           kanbanGirl.style.transform = `translateY(calc(${initialOffsetY}% - ${scrollY * speed}px))`;
-                        });
-                     } else {
-                        kanbanGirl.style.transform = `translateY(${initialOffsetY}%)`;
+            // --- Parallax Logic (Kanban) ---
+             // 调整: 将滚动监听合并
+             window.addEventListener('scroll', () => {
+                 const scrollY = window.scrollY;
+                 const viewportWidth = window.innerWidth;
+
+                 requestAnimationFrame(() => {
+                    // 左侧看板娘
+                    if (kanbanGirl && viewportWidth > 900) { // 调整宽度阈值
+                       const speed = parseFloat(kanbanGirl.dataset.scrollSpeed) || 0.08;
+                       const initialOffsetY = -50;
+                       kanbanGirl.style.transform = `translateY(calc(${initialOffsetY}% - ${scrollY * speed}px))`;
+                     } else if(kanbanGirl) {
+                        kanbanGirl.style.transform = `translateY(-50%)`; // 复位
                      }
-                 }, { passive: true }); 
-             } 
-        }); 
+                     // 新增: 右侧看板娘
+                      if (kanbanGirlRight && viewportWidth > 900) { // 调整宽度阈值
+                       const speedR = parseFloat(kanbanGirlRight.dataset.scrollSpeed) || -0.04; // 负数表示向上移动
+                        // 从底部开始，无百分比偏移
+                       kanbanGirlRight.style.transform = `translateY(${ - scrollY * speedR}px)`;
+                     } else if(kanbanGirlRight) {
+                         kanbanGirlRight.style.transform = `translateY(0%)`; // 复位
+                     }
+                  }); // end requestAnimationFrame
+             }, { passive: true }); // 新增: 性能优化
+
+            // 初始调用一次确保位置正确
+             window.dispatchEvent(new Event('scroll'));
+
+        }); // end DOMContentLoaded
     </script>
      <!-- JavaScript 脚本结束 -->
 </body>
