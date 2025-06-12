@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OneHub - 智能 AI 接口聚合平台</title>
+    <!-- CSS 样式开始 -->
     <style>
         /* === 基础和重置 === */
         :root {
@@ -12,6 +13,7 @@
             --text-color: #1f2937;
             --light-text-color: #4b5563;
             --glass-bg: rgba(255, 255, 255, 0.35);
+             --glass-bg-hero: rgba(255, 255, 255, 0.25); /* 英雄区卡片更透明 */
             --glass-border: rgba(255, 255, 255, 0.4);
             --glass-hover-bg: rgba(255, 255, 255, 0.5);
              --card-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
@@ -121,7 +123,6 @@
         }
          .glass-card:hover {
              background: var(--glass-hover-bg);
-              /* transform: translateY(-5px); */ /* 取消表格容器的上浮，避免内容跳动 */
          }
          /* 针对网格卡片的hover效果 */
           .card-grid .glass-card:hover {
@@ -181,6 +182,7 @@
              transition: transform 0.05s linear; /* 平滑视差 */
              max-width: 180px;
              max-height: 70vh;
+             will-change: transform;
         }
          .kanban-girl img {
              width: 100%;
@@ -193,7 +195,7 @@
         #hero {
              position: relative;
             height: 85vh;
-            min-height: 550px;
+            min-height: 500px;
             max-height: 800px;
             overflow: hidden;
             border-radius: 20px;
@@ -203,7 +205,7 @@
              align-items: center;
              justify-content: center;
              border: 1px solid var(--glass-border);
-              background-color: #fff; /* 防止加载瞬间白屏 */
+              background-color: #eef; /* 防止加载瞬间白屏 */
         }
         .slider {
             position: absolute;
@@ -211,6 +213,7 @@
             height: 100%;
             top: 0;
             left: 0;
+             z-index: 1;
         }
         .slide {
             position: absolute;
@@ -219,12 +222,14 @@
             opacity: 0;
             transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
              transform: scale(1.1);
-             z-index: 1;
+             /* z-index: 1; */
+              visibility: hidden;
         }
         .slide.active {
             opacity: 1;
              transform: scale(1);
-             z-index: 2;
+            /* z-index: 2; */
+             visibility: visible;
         }
         .slide img {
             width: 100%;
@@ -238,9 +243,7 @@
              position: absolute;
              top: 0; left: 0; width: 100%; height: 100%;
              background: rgba(255,255,255, 0.05); /* 轻微白色遮罩 */
-             /* backdrop-filter: blur(0px);  移除模糊 */
-             /* -webkit-backdrop-filter: blur(0px); 移除模糊 */
-             z-index: 3;
+              z-index: 2;
         }
 
         /* 修改：调整卡片透明度和尺寸，减少遮挡 */
@@ -251,16 +254,23 @@
             padding: 40px 35px;
              max-width: 75%;
              margin: auto;
-             background: rgba(255, 255, 255, 0.2); /* 更透明一点 */
+             background: var(--glass-bg-hero); /* 更透明一点 */
              backdrop-filter: blur(10px); /* 保留卡片自身模糊 */
              -webkit-backdrop-filter: blur(10px);
+              border-radius: 16px;
+              border: 1px solid var(--glass-border);
+              box-shadow: var(--card-shadow);
+               transition: background 0.3s ease;
         }
+          .hero-content:hover {
+              background: rgba(255, 255, 255, 0.35);
+          }
          .hero-content h1 {
             font-size: 4.5em;
             font-weight: 800;
             margin-bottom: 15px;
               color: var(--primary-color);
-               text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+               text-shadow: 2px 2px 8px rgba(255,255,255,0.6);
          }
          .hero-content .subtitle {
             font-size: 1.6em;
@@ -268,7 +278,7 @@
             margin-bottom: 30px;
             min-height: 1.8em;
              font-weight: 500;
-             text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+             text-shadow: 1px 1px 4px rgba(255,255,255,0.6);
          }
           /* 打字机光标 */
          .cursor {
@@ -307,6 +317,7 @@
              align-items: center;
              justify-content: center;
               padding-bottom: 2px;
+              user-select: none;
          }
           .nav-arrow:hover {
              background: var(--glass-hover-bg);
@@ -366,7 +377,7 @@
              padding: 20px 30px;
              overflow-x: auto;
         }
-         /* 新增：表格内小标题样式 */
+         /* 表格内小标题样式 */
         .table-container h3 {
             margin-top: 45px;
             margin-bottom: 15px;
@@ -380,7 +391,7 @@
          .table-container h3:first-of-type {
             margin-top: 10px; /* 第一个标题上边距小一点 */
          }
-         /* 新增：注释样式 */
+         /* 注释样式 */
           .table-note {
              margin-top: 25px;
              font-size: 0.9em;
@@ -397,7 +408,7 @@
              background: rgba(255,255,255,0.2);
              border-radius: 10px;
               overflow: hidden;
-               margin-bottom: 20px; /* 新增：表格间距 */
+               margin-bottom: 20px; /* 表格间距 */
         }
          th, td {
              padding: 12px 18px;
@@ -419,14 +430,7 @@
            tbody tr:hover {
               background: rgba(255,255,255,0.3);
            }
-           /* 移除：第3列加粗，因表格列数不统一 */
-           /*
-           td:nth-child(3) {
-             font-weight: bold;
-             color: var(--secondary-color);
-           }
-           */
-            /* 新增：价格列加粗 */
+            /* 价格列加粗 */
             td.price-col {
                 font-weight: 600;
                  color: var(--secondary-color);
@@ -452,7 +456,7 @@
         }
          footer .glass-card:hover {
             transform: none;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
          }
 
         /* === 响应式设计 === */
@@ -469,7 +473,12 @@
                 .hero-content { max-width: 85%; padding: 30px;}
                .glow-button { padding: 10px 20px; font-size: 1em;}
                section h2 {font-size: 1.8em;}
+               /* 手机上表格文字和间距紧凑些 */
+              .table-container { padding: 15px;}
+               th, td { padding: 10px 12px; font-size: 0.9em;}
+               th { font-size: 0.95em;}
         }
+         /* 小屏/手机 隐藏看板娘 */
          @media (max-width: 600px) {
              .kanban-girl {
                  display: none; /* 小屏隐藏 */
@@ -478,28 +487,30 @@
                  padding-left: 0;
               }
              .hero-content h1 { font-size: 2.5em; }
-             .hero-content { max-width: 95%; padding: 30px 20px; }
+             .hero-content .subtitle { font-size: 1.1em; min-height: 2em; margin-bottom: 20px;}
+             .hero-content { max-width: 90%; padding: 25px 15px; }
               .hero-buttons {
                  display: flex;
                  flex-direction: column;
                  align-items: center;
               }
-               .glow-button { margin: 10px 0; width: 80%;}
+               .glow-button { margin: 8px 0; width: 80%; font-size: 0.95em;}
                .nav-arrow {
-                  width: 40px; height: 40px; font-size: 1.5em;
+                  width: 35px; height: 35px; font-size: 1.4em;
+                   opacity: 0.7 !important; /* 手机上箭头一直显示，更清晰 */
                }
-                .nav-arrow.prev { left: 10px;}
-                .nav-arrow.next { right: 10px;}
-                 #hero { height: 60vh; min-height: 450px;}
+                .nav-arrow.prev { left: 8px;}
+                .nav-arrow.next { right: 8px;}
+                 #hero { height: 55vh; min-height: 420px; margin-bottom: 80px;}
                   section { margin-bottom: 60px;}
-                  .table-container { padding: 15px;}
-                   th, td { padding: 10px 12px;}
+                  section h2 { margin-bottom: 40px;}
+                  .card-grid { gap: 40px 20px;} /* 步骤卡片上下间距大一点 */
          }
-
     </style>
+    <!-- CSS 样式结束 -->
 </head>
-<body>
 
+<body>
      <!-- 动态背景 -->
     <div class="aura-background">
        <div class="aura-blob"></div>
@@ -516,7 +527,7 @@
     <div class="container">
 
         <!-- 1. 英雄区域 Hero Section -->
-        <section id="hero" class="scroll-reveal">
+        <section id="hero" class="scroll-reveal is-visible"> <!-- hero 默认可见 -->
            <div class="slider" id="sliderContainer">
                 <!-- 图片轮播 -->
                 <div class="slide active"><img src="https://816516.xyz/PicGo/%E4%B8%9B%E9%9B%A8%20(2).jpg" alt="背景图1"></div>
@@ -526,7 +537,7 @@
             <!-- Overlay 只提供轻微遮罩，无模糊 -->
             <div class="hero-overlay"></div> 
             <!-- 内容卡片自身提供亚克力效果 -->
-           <div class="hero-content glass-card">
+           <div class="hero-content">
                 <h1>OneHub</h1>
                 <p class="subtitle"><span id="typewriter"></span><span class="cursor"></span></p>
                 <div class="hero-buttons">
@@ -686,147 +697,160 @@
         </div>
     </footer>
 
-
+    <!-- JavaScript 脚本开始 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // 1. 轮播图 Slider
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const sliderContainer = document.getElementById('sliderContainer');
-             const heroSection = document.getElementById('hero'); // 获取整个hero区域
-            let currentIndex = 0;
-            let autoPlayInterval;
-            const autoPlayDelay = 6000; // 6秒切换
-
-            function showSlide(index) {
-                 // 确保索引在有效范围内
-                 if (index < 0) index = slides.length - 1;
-                 if (index >= slides.length) index = 0;
-                  if (!slides[index]) return; // 防止出错
-
-                 slides.forEach(slide => slide.classList.remove('active'));
-                 slides[index].classList.add('active');
-                 currentIndex = index;
-            }
-
-             function nextSlide() {
-                let nextIndex = (currentIndex + 1) % slides.length;
-                showSlide(nextIndex);
-             }
-             function prevSlide() {
-                 let prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-                 showSlide(prevIndex);
-             }
-
-             function startAutoPlay() {
-                 // 清除旧的定时器，防止重复
-                 if(autoPlayInterval) clearInterval(autoPlayInterval);
-                autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
-             }
-              function stopAutoPlay() {
-                 clearInterval(autoPlayInterval);
-              }
-
-            // 改进：点击按钮后重置自动播放计时
-             nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
-             prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
-            
-             // 改进：鼠标移入整个 Hero 区域暂停，移出恢复
-             if(heroSection){
-                heroSection.addEventListener('mouseenter', stopAutoPlay);
-                heroSection.addEventListener('mouseleave', startAutoPlay);
-             }
-             // 箭头按钮本身不需要单独处理 mouseenter，因为它们在 heroSection 内部
-
-
-             startAutoPlay(); // 页面加载时开始自动播放
-             showSlide(0); // 确保第一张图立刻显示
-
-            // 2. 打字机效果 Typewriter
+            // 确保元素存在再操作
+             const slides = document.querySelectorAll('.slide');
+             const prevBtn = document.getElementById('prevBtn');
+             const nextBtn = document.getElementById('nextBtn');
+             const heroSection = document.getElementById('hero'); 
              const typewriterEl = document.getElementById('typewriter');
              const cursorEl = document.querySelector('.cursor');
-             const phrases = [
-                 "统一访问主流 AI 模型",
-                 "极速稳定，弹性计费",
-                 "一键集成，简化开发流程"
-             ];
-             let phraseIndex = 0;
-             let charIndex = 0;
-             let isDeleting = false;
-             const typingSpeed = 120;
-             const deletingSpeed = 60;
-             const pauseDuration = 2000;
+              const kanbanGirl = document.getElementById('kanbanGirl');
+               const revealElements = document.querySelectorAll('.scroll-reveal');
 
-             function type() {
-                 if(cursorEl) cursorEl.style.animation = 'blink 0.7s infinite'; // 恢复光标闪烁
+            // 1. 轮播图 Slider
+           if(slides.length > 0 && prevBtn && nextBtn && heroSection) {
+                let currentIndex = 0;
+                let autoPlayInterval = null;
+                const autoPlayDelay = 6000; // 6秒切换
+                const isMobile = window.innerWidth <= 600;
 
-                const currentPhrase = phrases[phraseIndex];
-                let delay = isDeleting ? deletingSpeed : typingSpeed;
+                function showSlide(index) {
+                    if (index < 0) index = slides.length - 1;
+                    if (index >= slides.length) index = 0;
+                    if (!slides[index]) return;
 
-                if (!isDeleting && charIndex < currentPhrase.length) {
-                     typewriterEl.textContent += currentPhrase.charAt(charIndex);
-                     charIndex++;
-                } else if (isDeleting && charIndex > 0) {
-                     typewriterEl.textContent = currentPhrase.substring(0, charIndex - 1);
-                     charIndex--;
-                } else if (!isDeleting && charIndex === currentPhrase.length) {
-                     delay = pauseDuration;
-                     isDeleting = true;
-                      if(cursorEl) cursorEl.style.animation = 'none'; // 打完一句话，光标暂停闪烁
-                } else if (isDeleting && charIndex === 0) {
-                     isDeleting = false;
-                     phraseIndex = (phraseIndex + 1) % phrases.length;
-                     delay = 500; // 新句子开始前稍等
+                    slides.forEach(slide => slide.classList.remove('active'));
+                    slides[index].classList.add('active');
+                    currentIndex = index;
+                }
+
+                 function nextSlide() {
+                    showSlide(currentIndex + 1);
                  }
-                 setTimeout(type, delay);
-             }
-            setTimeout(type, 1000); // 页面加载后延迟1秒开始
+                 function prevSlide() {
+                    showSlide(currentIndex - 1);
+                 }
+
+                 function startAutoPlay() {
+                     if(autoPlayInterval) clearInterval(autoPlayInterval);
+                    autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+                 }
+                  function stopAutoPlay() {
+                      if(autoPlayInterval) clearInterval(autoPlayInterval);
+                  }
+
+                 nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
+                 prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
+                
+                 // 手机上不暂停自动播放，箭头常驻
+                 if(!isMobile) {
+                    heroSection.addEventListener('mouseenter', stopAutoPlay);
+                    heroSection.addEventListener('mouseleave', startAutoPlay);
+                  }
+
+                 startAutoPlay(); 
+                 showSlide(0); 
+            } // slider end if
+
+
+            // 2. 打字机效果 Typewriter
+            if(typewriterEl && cursorEl) {
+                 const phrases = [
+                     "统一访问主流 AI 模型",
+                     "极速稳定，弹性计费",
+                     "一键集成，简化开发流程"
+                 ];
+                 let phraseIndex = 0;
+                 let charIndex = 0;
+                 let isDeleting = false;
+                 const typingSpeed = 100; // 手机端稍快
+                 const deletingSpeed = 50;
+                 const pauseDuration = 1800;
+
+                 function type() {
+                    cursorEl.style.animation = 'blink 0.7s infinite'; // 恢复光标闪烁
+                    const currentPhrase = phrases[phraseIndex];
+                    let delay = isDeleting ? deletingSpeed : typingSpeed;
+
+                    if (!isDeleting && charIndex < currentPhrase.length) {
+                         typewriterEl.textContent += currentPhrase.charAt(charIndex);
+                         charIndex++;
+                    } else if (isDeleting && charIndex > 0) {
+                         typewriterEl.textContent = currentPhrase.substring(0, charIndex - 1);
+                         charIndex--;
+                    } else if (!isDeleting && charIndex === currentPhrase.length) {
+                         delay = pauseDuration;
+                         isDeleting = true;
+                         cursorEl.style.animation = 'none'; // 打完一句话，光标暂停闪烁
+                    } else if (isDeleting && charIndex === 0) {
+                         isDeleting = false;
+                         phraseIndex = (phraseIndex + 1) % phrases.length;
+                         delay = 400; // 新句子开始前稍等
+                     }
+                      // 确保元素还存在再设置超时
+                     if(typewriterEl) {
+                        setTimeout(type, delay);
+                     }
+                 }
+                setTimeout(type, 500); // 页面加载后延迟0.5秒开始
+            } // typewriter end if
 
 
             // 3. 滚动入场动画 Scroll Reveal (Intersection Observer)
-             const revealElements = document.querySelectorAll('.scroll-reveal');
-             const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                         entry.target.classList.add('is-visible');
-                         // 可选：一旦显示就不再观察
-                         observer.unobserve(entry.target); 
-                    }
-                     // 如果需要滚出时隐藏，取消注释下面这行，并移除 observer.unobserve
-                    // else { entry.target.classList.remove('is-visible'); }
-                });
-             }, {
-                root: null,
-                threshold: 0.1, // 元素10%可见时触发
-                rootMargin: "0px 0px -50px 0px" // 提前一点触发
-             });
+            if(revealElements.length > 0){
+                 const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        // 忽略 hero section，它默认可见
+                         if(entry.target.id === 'hero') return;
+                        if (entry.isIntersecting) {
+                             entry.target.classList.add('is-visible');
+                             observer.unobserve(entry.target); 
+                        }
+                    });
+                 }, {
+                    root: null,
+                    threshold: 0.1, // 元素10%可见时触发
+                    rootMargin: "0px 0px -40px 0px" // 提前一点触发
+                 });
+                 revealElements.forEach(el => revealObserver.observe(el));
+            } // scroll reveal end if
 
-             revealElements.forEach(el => revealObserver.observe(el));
 
             // 4. 看板娘视差滚动 Parallax
-             const kanbanGirl = document.getElementById('kanbanGirl');
              if (kanbanGirl) {
-                 const speed = parseFloat(kanbanGirl.dataset.scrollSpeed) || 0.1;
+                 const speed = parseFloat(kanbanGirl.dataset.scrollSpeed) || 0.08;
                  const initialOffsetY = -50; // CSS中的 translateY(-50%)
 
                  window.addEventListener('scroll', () => {
                     // 仅在非小屏幕下执行
                     if(window.innerWidth > 600) {
                        const scrollY = window.scrollY;
-                       // 在初始垂直居中的基础上，根据滚动距离和速度计算偏移
-                       // 负号让看板娘向上移动，但速度比页面滚动慢，形成视差
-                       kanbanGirl.style.transform = `translateY(calc(${initialOffsetY}% + ${scrollY * -speed}px))`;
+                       requestAnimationFrame(() => {
+                           kanbanGirl.style.transform = `translateY(calc(${initialOffsetY}% - ${scrollY * speed}px))`;
+                        });
                      } else {
-                       // 小屏幕恢复默认，虽然css已隐藏，但以防万一
                         kanbanGirl.style.transform = `translateY(${initialOffsetY}%)`;
                      }
                  }, { passive: true }); // passive 提高性能
-             }
+             } // kanban-girl end if
              
         }); // DOMContentLoaded End
     </script>
+     <!-- JavaScript 脚本结束 -->
 
 </body>
 </html>
+```---
+**关于截图中的手机视图补充：**
+*   代码中包含了响应式设计 `@media (max-width: 600px)`，专门针对手机等小屏幕进行了优化：
+    *   **看板娘** 会自动隐藏 (`display: none;`)，避免遮挡和布局混乱。
+    *   英雄区的按钮会变成**上下堆叠**排列。
+    *   “核心优势”和“快速上手”的卡片会变成**单列、上下堆叠**。
+    *   字体和间距会适当缩小。
+*   表格在手机上因为宽度限制，会显得比较拥挤或需要横向滚动，这是正常现象，已尽量优化字体大小。
+
+这次应该能彻底解决语法错误导致的代码显示和脚本失效问题。给您添麻烦了，请再试一次！
