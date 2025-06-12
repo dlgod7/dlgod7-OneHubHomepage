@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OneHub - 智能 AI 接口聚合平台</title>
-     <!-- 引入 Font Awesome 图标库 CDN -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <!-- CSS 样式开始 -->
     <style>
         :root {
@@ -15,6 +13,7 @@
             --glass-bg: rgba(255, 255, 255, 0.30); --glass-bg-hero: rgba(255, 255, 255, 0.20);
             --glass-border: rgba(255, 255, 255, 0.45); --glass-hover-bg: rgba(255, 255, 255, 0.45);
             --card-shadow: 0 8px 32px rgba(99, 38, 188, 0.12); --blur: 15px;
+             --container-width: 1100px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
@@ -23,15 +22,17 @@
             background-color: #f0f2ff; color: var(--text-color); line-height: 1.6; overflow-x: hidden; position: relative; min-height: 100vh;
         }
          .aura-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; filter: blur(90px); opacity: 0.85; }
-        .aura-blob { position: absolute; border-radius: 50%; mix-blend-mode: overlay; animation: moveBlob 25s infinite alternate linear;}
+        .aura-blob { position: absolute; border-radius: 50%; mix-blend-mode: overlay; animation: moveBlob 28s infinite alternate linear;}
         .aura-blob:nth-child(1) { width: 600px; height: 600px; background: rgba(168, 134, 250, 0.7); top: -10%; left: -10%;}
         .aura-blob:nth-child(2) { width: 700px; height: 700px; background: rgba(134, 206, 250, 0.7); bottom: -20%; right: -15%; animation-duration: 30s; animation-delay: -5s;}
         .aura-blob:nth-child(3) { width: 500px; height: 500px; background: rgba(255, 105, 180, 0.5); top: 50%; left: 40%; animation-duration: 35s; animation-delay: -10s;}
-        .aura-blob:nth-child(4) { width: 400px; height: 400px; background: rgba(0, 255, 255, 0.4); top: 10%; right: 10%; animation-duration: 20s; animation-delay: -2s;}
+        .aura-blob:nth-child(4) { width: 400px; height: 400px; background: rgba(0, 255, 255, 0.4); top: 10%; right: 10%; animation-duration: 22s; animation-delay: -2s;}
         .aura-blob:nth-child(5) { width: 300px; height: 300px; background: rgba(200, 160, 255, 0.6); bottom: 10%; left: 20%; animation-duration: 40s; animation-delay: -15s;}
         @keyframes moveBlob { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(100px, -50px) scale(1.2); } 100% { transform: translate(-50px, 100px) scale(0.9); }}
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2;}
-        main { padding-left: 100px; }
+        
+        /* 容器和布局 */
+         .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; position: relative; z-index: 3;} /* Z-index 提升 */
+        main { padding-left: 100px; padding-top: 80px; padding-bottom: 40px; } /* 上下留白 */
         section { margin-bottom: 100px; padding-top: 20px; }
         section h2 {
              text-align: center; margin-bottom: 60px; font-size: 2.3em; font-weight: 700; color: var(--primary-color);
@@ -39,6 +40,7 @@
              -webkit-background-clip: text; -webkit-text-fill-color: transparent;
              text-shadow: 0 0 8px rgba(138, 43, 226, 0.3), 0 0 15px rgba(0, 191, 255, 0.2);
         }
+         /* 卡片和按钮 */
         .glass-card {
             background: var(--glass-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
             border-radius: 18px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow); padding: 30px;
@@ -57,20 +59,45 @@
         .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
         .card-grid .glass-card:nth-child(2) { transition-delay: 0.15s; }
         .card-grid .glass-card:nth-child(3) { transition-delay: 0.3s; }
-        .kanban-girl { position: fixed; left: 1.5vw; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; transition: transform 0.05s linear; max-width: 180px; max-height: 70vh; will-change: transform;}
+         /* 看板娘 */
+        .kanban-girl { position: fixed; left: 1.5vw; top: 50%; transform: translateY(-50%); z-index: 2; /* 稍微提高层级 */ pointer-events: none; transition: transform 0.05s linear; max-width: 180px; max-height: 70vh; will-change: transform;}
         .kanban-girl img { width: 100%; height: auto; display: block; animation: girlGlow 6s infinite ease-in-out; }
         @keyframes girlGlow { 0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)) drop-shadow(0 0 5px rgba(168, 134, 250, 0)); } 50% { filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 20px rgba(180, 134, 255, 0.7)); }}
+        
+        /* ===== 英雄区 - 全宽 & Ken Burns ===== */
         #hero {
-             position: relative; height: 85vh; min-height: 500px; max-height: 800px; overflow: hidden; border-radius: 20px; box-shadow: var(--card-shadow);
-             margin-bottom: 120px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); background-color: #eef; 
+             position: relative; height: 90vh; min-height: 550px; max-height: 900px; overflow: hidden;
+              width: 100%; /* 全宽 */
+              display: flex; align-items: center; justify-content: center; 
+              background-color: #e0e0ff; 
+              z-index: 1; /* 层级 */
+              padding: 0 20px; /* 左右留白 */
+               margin-bottom: 0; /* 移除外边距 */
+               border-bottom: 1px solid var(--glass-border);
         }
         .slider { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;}
-        .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; transform: scale(1.1); visibility: hidden;}
-        .slide.active { opacity: 1; transform: scale(1); visibility: visible;}
-        .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.95);}
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(240, 242, 255, 0.1); z-index: 2;}
+         /* Ken Burns 效果 */
+        .slide { 
+           position: absolute; width: 100%; height: 100%; opacity: 0; 
+            /* 淡入淡出 1.5s, 缩放 9s */
+           transition: opacity 1.5s ease-in-out, transform 9s linear; 
+           transform: scale(1); /* 起始大小 */
+           visibility: hidden;
+         }
+        .slide.active { 
+           opacity: 1; 
+           transform: scale(1.18); /* 目标大小，缓慢放大 */
+           visibility: visible;
+         }
+        .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9);}
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(240, 242, 255, 0.15); z-index: 2;}
+         .hero-content-wrapper {
+             max-width: var(--container-width); width: 100%;
+             display: flex; align-items: center; justify-content: center;
+              z-index: 4;
+         }
          .hero-content {
-            position: relative; z-index: 4; text-align: center; padding: 40px 35px; max-width: 75%; margin: auto;
+            position: relative; text-align: center; padding: 40px 35px; max-width: 800px; margin: auto;
             background: var(--glass-bg-hero); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-radius: 18px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow); transition: background 0.3s ease, box-shadow 0.3s ease;
         }
@@ -86,20 +113,19 @@
          }
         .nav-arrow:hover { background: var(--glass-hover-bg); color: var(--accent-color); box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);}
         #hero:hover .nav-arrow { opacity: 0.9; }
-        .nav-arrow.prev { left: 20px; padding-right: 3px;}
-        .nav-arrow.next { right: 20px; padding-left: 3px;}
+         /* 箭头位置调整 */
+        .nav-arrow.prev { left: 3vw; padding-right: 3px;}
+        .nav-arrow.next { right: 3vw; padding-left: 3px;}
         
-        /* 新增：制作者徽章 */
+        /* 制作者徽章 */
          .creator-badge {
-            position: absolute; bottom: 25px; right: 30px; z-index: 5;
-            font-size: 0.85em; padding: 6px 14px;
-            background: rgba(255, 255, 255, 0.2);
+            position: absolute; bottom: 20px; right: 3vw; z-index: 5;
+            font-size: 0.85em; padding: 6px 14px; background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 12px rgba(99, 38, 188, 0.08);
-            pointer-events: none; opacity: 0.95;
+            box-shadow: 0 4px 12px rgba(99, 38, 188, 0.08); pointer-events: none; opacity: 0.95;
          }
-
+          /* 内容卡片和图标 */
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 35px; }
         .card-grid .glass-card { text-align: center; padding: 40px 25px; }
         .card-grid .fa-solid, .card-grid .fas {
@@ -116,6 +142,7 @@
              align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); border: 3px solid white;
         }
         .steps .fa-solid, .steps .fas { display: none;}
+         /* 表格 */
         .table-container { padding: 20px 30px; overflow-x: auto;}
         .table-container h3 {
             margin-top: 45px; margin-bottom: 15px; color: var(--primary-color); font-size: 1.4em;
@@ -130,9 +157,12 @@
         tr:last-child td { border-bottom: none;}
         tbody tr:hover { background: rgba(255,255,255,0.35); box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
         td.price-col { font-weight: 600; color: var(--cyan-color); text-shadow: 0 0 4px rgba(0, 255, 255, 0.4); }
-        footer { text-align: center; padding: 40px 20px; margin-top: 80px; color: var(--light-text-color); font-size: 0.9em; position: relative; z-index: 2;}
-        footer .glass-card { display: inline-block; padding: 15px 35px; box-shadow: none; background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.2); transition: all 0.3s ease;}
-        footer .glass-card:hover { transform: none; background: rgba(255, 255, 255, 0.25); box-shadow: var(--card-shadow);}
+         /* 页脚和闪光字 */
+        footer { text-align: center; padding: 40px 0 60px 0; margin-top: 40px; color: var(--light-text-color); font-size: 0.9em; position: relative; z-index: 3; 
+           border-top: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);}
+        footer .glass-card { display: inline-block; padding: 12px 35px; box-shadow: none; background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.2); transition: all 0.3s ease;
+            box-shadow: var(--card-shadow); }
+        footer .glass-card:hover { transform: none; background: rgba(255, 255, 255, 0.25); box-shadow: var(--card-shadow), inset 0 0 10px rgba(255,255,255,0.4);}
          .sparkle-text {
             font-weight: bold; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color), var(--cyan-color));
             background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -142,25 +172,28 @@
         @keyframes sparkleGlow { from { text-shadow: 0 0 2px #fff, 0 0 5px var(--primary-color); } to { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 15px var(--secondary-color); }}
         footer p { white-space: nowrap;}
 
+         /* 响应式 */
         @media (max-width: 900px) {
             .kanban-girl { left: -50px; max-width: 120px; }
              main { padding-left: 20px; }
              .hero-content h1 { font-size: 3em;} .hero-content .subtitle { font-size: 1.2em;}
-             .hero-content { max-width: 85%; padding: 30px;} .glow-button { padding: 10px 20px; font-size: 1em;}
+             .hero-content { padding: 30px;} .glow-button { padding: 10px 20px; font-size: 1em;}
              section h2 {font-size: 1.8em;} .table-container { padding: 15px;}
              th, td { padding: 10px 12px; font-size: 0.9em;} th { font-size: 0.95em;}
         }
          @media (max-width: 600px) {
-             .kanban-girl { display: none;} main { padding-left: 0; }
+             .kanban-girl { display: none;} main { padding-left: 0; padding-top: 40px; }
+             #hero { height: 60vh; min-height: 450px; }
              .hero-content h1 { font-size: 2.5em; } .hero-content .subtitle { font-size: 1.1em; min-height: 2em; margin-bottom: 20px;}
-             .hero-content { max-width: 90%; padding: 25px 15px; } .hero-buttons { display: flex; flex-direction: column; align-items: center;}
+             .hero-content { padding: 25px 15px; width: 100%; max-width: 95%; } 
+             .hero-buttons { display: flex; flex-direction: column; align-items: center;}
              .glow-button { margin: 8px 0; width: 80%; font-size: 0.95em;}
-             .nav-arrow { width: 35px; height: 35px; font-size: 1.4em; opacity: 0.7 !important;} .nav-arrow.prev { left: 8px;} .nav-arrow.next { right: 8px;}
-             #hero { height: 55vh; min-height: 420px; margin-bottom: 80px;} section { margin-bottom: 70px;} section h2 { margin-bottom: 50px;}
+             .nav-arrow { width: 35px; height: 35px; font-size: 1.4em; opacity: 0.7 !important;} 
+             .nav-arrow.prev { left: 10px;} .nav-arrow.next { right: 10px;}
+             section { margin-bottom: 70px;} section h2 { margin-bottom: 50px;}
              .card-grid { gap: 50px 20px;} .card-grid .fa-solid, .card-grid .fas { font-size: 2.2em;}
              footer p { white-space: normal; line-height: 1.8;} .sparkle-text { display: inline-block; margin-top: 5px;}
-             /* 手机端徽章位置 */
-              .creator-badge { bottom: 12px; right: 12px; font-size: 0.75em; padding: 4px 10px; }
+             .creator-badge { bottom: 12px; right: 12px; font-size: 0.75em; padding: 4px 10px; }
          }
     </style>
     <!-- CSS 样式结束 -->
@@ -170,41 +203,40 @@
     <div class="aura-background">
        <div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div>
     </div>
-
-    <!-- 看板娘：保持原图，因blob链接无法使用 -->
     <div class="kanban-girl" id="kanbanGirl" data-scroll-speed="0.08">
          <img src="https://816516.xyz/PicGo/%E4%B8%9B%E9%9B%A8%20(1).jpg" alt="OneHub 看板娘">
      </div>
 
+    <!-- 英雄区 - 结构调整为全宽 -->
+     <section id="hero" class="is-visible"> 
+         <div class="slider" id="sliderContainer">
+              <div class="slide active"><img src="https://th.bing.com/th/id/R.f30fbf5ea4a1b2a57cb00f8d2eb1a3bd?rik=mAk2UYD%2fctcukw&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2f6b1305f9e98fe337a9896165d25a445b6a1072d2.jpg&ehk=jno%2fCsn8fiA6orsxa90I4dAgeDkCWFPjR%2fP4sO2%2fwTQ%3d&risl=&pid=ImgRaw&r=0" alt="背景图1 猫耳少女"></div>
+              <div class="slide"><img src="https://th.bing.com/th/id/OIP.QkFLyvk8W4jtWzx9LDJE_QHaEo?pid=1.7" alt="背景图2 贴贴"></div>
+               <div class="slide"><img src="https://th.bing.com/th/id/OIP.O85CYMtw_Jh3eBJS9pNzLwHaEo?pid=1.7" alt="背景图3 飞行器"></div>
+               <div class="slide"><img src="https://th.bing.com/th/id/OIP.MOom5m-nVzdGqxuhN87gygHaEK?pid=1.7" alt="背景图4 星空列车"></div>
+                <div class="slide"><img src="https://th.bing.com/th/id/OIP.Q8c0yVp9fbryo1vPTgHe5QHaEK?pid=1.7" alt="背景图5 海边烟花"></div>
+         </div>
+         <div class="hero-overlay"></div> 
+          <div class="hero-content-wrapper"> <!-- 内容居中容器 -->
+             <div class="hero-content">
+                  <h1>OneHub</h1>
+                  <p class="subtitle"><span id="typewriter"></span><span class="cursor"></span></p>
+                  <div class="hero-buttons">
+                     <a href="#quick-start" class="glow-button">开始使用</a>
+                     <a href="#models" class="glow-button">模型定价</a>
+                  </div>
+             </div>
+           </div>
+          <button class="nav-arrow prev" id="prevBtn" aria-label="上一张">❮</button>
+          <button class="nav-arrow next" id="nextBtn" aria-label="下一张">❯</button>
+          <div class="creator-badge">
+               <span class="sparkle-text">由站长 dlgod7 制作</span>
+           </div>
+      </section>
+
+    <!-- 主内容区 -->
    <main>
     <div class="container">
-        <!-- 1. 英雄区域 Hero Section - 更新图片，增加徽章 -->
-        <section id="hero" class="scroll-reveal is-visible"> 
-           <div class="slider" id="sliderContainer">
-                <!-- 图片已替换为新地址，共5张 -->
-                <div class="slide active"><img src="https://th.bing.com/th/id/R.f30fbf5ea4a1b2a57cb00f8d2eb1a3bd?rik=mAk2UYD%2fctcukw&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2f6b1305f9e98fe337a9896165d25a445b6a1072d2.jpg&ehk=jno%2fCsn8fiA6orsxa90I4dAgeDkCWFPjR%2fP4sO2%2fwTQ%3d&risl=&pid=ImgRaw&r=0" alt="背景图1 猫耳少女"></div>
-                <div class="slide"><img src="https://th.bing.com/th/id/OIP.QkFLyvk8W4jtWzx9LDJE_QHaEo?pid=1.7" alt="背景图2 贴贴"></div>
-                 <div class="slide"><img src="https://th.bing.com/th/id/OIP.O85CYMtw_Jh3eBJS9pNzLwHaEo?pid=1.7" alt="背景图3 飞行器"></div>
-                 <div class="slide"><img src="https://th.bing.com/th/id/OIP.MOom5m-nVzdGqxuhN87gygHaEK?pid=1.7" alt="背景图4 星空列车"></div>
-                  <div class="slide"><img src="https://th.bing.com/th/id/OIP.Q8c0yVp9fbryo1vPTgHe5QHaEK?pid=1.7" alt="背景图5 海边烟花"></div>
-           </div>
-            <div class="hero-overlay"></div> 
-           <div class="hero-content">
-                <h1>OneHub</h1>
-                <p class="subtitle"><span id="typewriter"></span><span class="cursor"></span></p>
-                <div class="hero-buttons">
-                   <a href="#quick-start" class="glow-button">开始使用</a>
-                   <a href="#models" class="glow-button">模型定价</a>
-                </div>
-           </div>
-            <button class="nav-arrow prev" id="prevBtn" aria-label="上一张">❮</button>
-            <button class="nav-arrow next" id="nextBtn" aria-label="下一张">❯</button>
-             <!-- 新增：制作者徽章 -->
-            <div class="creator-badge">
-                 <span class="sparkle-text">由站长 dlgod7 制作</span>
-             </div>
-        </section>
-
         <!-- 2. 核心优势 Features -->
          <section id="features" class="scroll-reveal">
             <h2>核心优势</h2>
@@ -214,7 +246,6 @@
                  <div class="glass-card"><i class="fas fa-chart-line"></i><h3>数据洞察</h3><p>提供详细的请求日志、消耗明细和可视化统计报表，让模型用量和成本一目了然。</p></div>
             </div>
          </section>
-
          <!-- 3. 快速上手 Quick Start -->
           <section id="quick-start" class="scroll-reveal">
              <h2>快速上手</h2>
@@ -224,7 +255,6 @@
                   <div class="glass-card"><span class="step-number">3</span><i class="fas fa-code"></i><h3>对接使用</h3><p>参照简洁的API文档，将 Key 快速集成到您的各类应用中。</p></div>
              </div>
           </section>
-
            <!-- 4. 模型支持 Model Support -->
         <section id="models" class="scroll-reveal">
              <h2>模型支持与定价 (2025年6月)</h2>
@@ -275,7 +305,6 @@
     </div>
     </main>
     
-     <!-- 页脚 - 移除制作信息 -->
     <footer>
        <div class="glass-card">
          <p>© 2025 OneHub. All Rights Reserved.</p>
@@ -294,14 +323,13 @@
               const kanbanGirl = document.getElementById('kanbanGirl');
                const revealElements = document.querySelectorAll('.scroll-reveal');
 
-           // 轮播图JS无需修改，自动适应slide数量
            if(slides.length > 0 && prevBtn && nextBtn && heroSection) {
                 let currentIndex = 0;
                 let autoPlayInterval = null;
-                const autoPlayDelay = 5000; // 5秒切换
+                const autoPlayDelay = 7000; // 调整：7秒切换，匹配 Ken Burns
                 const isMobile = window.innerWidth <= 600;
                 function showSlide(index) {
-                    index = (index + slides.length) % slides.length; // 循环
+                    index = (index + slides.length) % slides.length; 
                     if (!slides[index]) return;
                     slides.forEach(slide => slide.classList.remove('active'));
                     slides[index].classList.add('active');
@@ -311,7 +339,7 @@
                  function prevSlide() { showSlide(currentIndex - 1); }
                  function startAutoPlay() {
                      if(autoPlayInterval) clearInterval(autoPlayInterval);
-                     if (slides.length > 1) autoPlayInterval = setInterval(nextSlide, autoPlayDelay); // 只有一张图不轮播
+                     if (slides.length > 1) autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
                  }
                   function stopAutoPlay() { if(autoPlayInterval) clearInterval(autoPlayInterval); }
 
@@ -334,10 +362,8 @@
                     const currentPhrase = phrases[phraseIndex % phrases.length];
                     let delay = isDeleting ? deletingSpeed : typingSpeed;
                      typewriterEl.textContent = currentPhrase.substring(0, charIndex);
-                    if (!isDeleting && charIndex < currentPhrase.length) {
-                         charIndex++;
-                    } else if (isDeleting && charIndex > 0) {
-                         charIndex--;
+                    if (!isDeleting && charIndex < currentPhrase.length) { charIndex++;
+                    } else if (isDeleting && charIndex > 0) { charIndex--;
                     } else if (!isDeleting && charIndex === currentPhrase.length) {
                          delay = pauseDuration; isDeleting = true; cursorEl.style.animation = 'none';
                     } else if (isDeleting && charIndex === 0) {
@@ -357,7 +383,7 @@
                              observer.unobserve(entry.target); 
                         }
                     });
-                 }, { root: null, threshold: 0.05, rootMargin: "0px 0px -50px 0px" });
+                 }, { root: null, threshold: 0.05, rootMargin: "0px 0px -60px 0px" });
                  revealElements.forEach(el => revealObserver.observe(el));
             }
 
