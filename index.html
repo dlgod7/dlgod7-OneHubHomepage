@@ -402,4 +402,201 @@
                     <thead><tr><th>模型ID</th><th>输入价格</th><th>输出价格</th></tr></thead>
                      <tbody>
                         <tr><td>o3-pro (OpenAI)</td><td><span class="price-col">$20/百万tokens</span></td><td><span class="price-col">$80/百万tokens</span></td></tr>
-                         <tr><td>gemini-2.5-pro-preview-06-05 (Google)</td><td><span class="price-col">$1.25/百万</span></td><td><span class
+                         <tr><td>gemini-2.5-pro-preview-06-05 (Google)</td><td><span class="price-col">$1.25/百万</span></td><td><span class="price-col">$10/百万</span></td></tr>
+                         <tr><td>gemini-2.5-flash-preview-05-20 (Google)</td><td><span class="price-col">$0.15/百万</span></td><td><span class="price-col">$0.60/百万</span></td></tr>
+                           <tr><td>claude-opus-4 (Anthropic)</td><td><span class="price-col">$15/百万</span></td><td><span class="price-col">$75/百万</span></td></tr>
+                          <tr><td>doubao-seed-1.6-thinking (字节)</td><td><span class="price-col">$0.11/百万</span></td><td><span class="price-col">$1.10/百万</span></td></tr>
+                           <tr><td>kingfall-preview-06-09 (Google)</td><td><span class="price-col">$2.50/百万*</span></td><td><span class="price-col">$12.50/百万*</span></td></tr>
+                     </tbody>
+                </table>
+                 <h3><i class="fas fa-image"></i>图像生成模型</h3>
+                 <table>
+                     <!-- === 修复: HTML 补全, 增加后续表格内容 === -->
+                    <thead><tr><th>模型ID</th><th colspan="2">价格（分辨率≥1024px）</th></tr></thead>
+                     <tbody>
+                         <tr><td>flux-1.1-pro-ultra</td><td colspan="2"><span class="price-col">$0.06/张</span></td></tr>
+                          <tr><td>dalle-3-api-06-2025</td><td colspan="2"><span class="price-col">$0.04/张</span></td></tr>
+                         <tr><td>imagen-pro-2025</td><td colspan="2"><span class="price-col">$0.035/张</span></td></tr>
+                         <tr><td>stable-diffusion-3-api</td><td colspan="2"><span class="price-col">$0.03/张</span></td></tr>
+                     </tbody>
+                  </table>
+                   <h3><i class="fas fa-music"></i>音频生成模型</h3>
+                   <table>
+                       <thead><tr><th>模型ID</th><th colspan="2">价格（标准质量）</th></tr></thead>
+                        <tbody>
+                           <tr><td>suno-v4-pro</td><td colspan="2"><span class="price-col">$10/500首（≤30秒）</span></td></tr>
+                            <tr><td>eleven-multilingual-v2</td><td colspan="2"><span class="price-col">$0.0005/字符</span></td></tr>
+                             <tr><td>dia-1.6b-tts (开源)</td><td colspan="2"><span class="price-col">免费</span></td></tr>
+                        </tbody>
+                   </table>
+                   <h3><i class="fas fa-film"></i>视频生成模型</h3>
+                    <table>
+                       <thead><tr><th>模型ID</th><th colspan="2">价格（1080p/30fps）</th></tr></thead>
+                       <tbody>
+                          <tr><td>kling-1.6-pro</td><td colspan="2"><span class="price-col">¥1/5秒</span></td></tr>
+                           <tr><td>runway-gen-2-pro</td><td colspan="2"><span class="price-col">$0.05/秒</span></td></tr>
+                            <tr><td>pika-labs-1.2</td><td colspan="2"><span class="price-col">$0.02/秒</span></td></tr>
+                       </tbody>
+                    </table>
+                 <p class="table-note">*注：标价均为2025年6月官方数据，带*为预发布模型推测价格</p>
+            </div>
+        </section>
+    </div>
+    </main>
+    
+    <footer>
+       <div class="glass-card">
+         <p>© 2025 OneHub. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ========================================= -->
+    <!-- === JavaScript 脚本开始 (完整恢复与新增) === -->
+     <!-- ========================================= -->
+    <script>
+         document.addEventListener('DOMContentLoaded', () => {
+             const slides = document.querySelectorAll('.slide');
+             const prevBtn = document.getElementById('prevBtn');
+             const nextBtn = document.getElementById('nextBtn');
+             const heroSection = document.getElementById('hero'); 
+             const typewriterEl = document.getElementById('typewriter');
+             const cursorEl = document.querySelector('.cursor');
+              const kanbanGirl = document.getElementById('kanbanGirl');
+              const kanbanGirlRight = document.getElementById('kanbanGirlRight');
+               // === 修复: 选择器匹配 HTML scroll-reveal-container ===
+               const revealElements = document.querySelectorAll('.scroll-reveal-container'); 
+                const buttons = document.querySelectorAll('.glow-button'); // 新增
+
+           // --- Slider Logic ---
+           if(slides.length > 0 && prevBtn && nextBtn && heroSection) {
+                let currentIndex = 0;
+                let autoPlayInterval = null;
+                const autoPlayDelay = 7000;
+                const isMobile = window.innerWidth <= 600;
+                function showSlide(index) {
+                     if (slides.length === 0) return; // 防御
+                    index = (index + slides.length) % slides.length; 
+                    if (!slides[index]) return;
+                    slides.forEach(slide => slide.classList.remove('active'));
+                    slides[index].style.transform = 'scale(1)';
+                    void slides[index].offsetWidth; 
+                    slides[index].classList.add('active');
+                    currentIndex = index;
+                }
+                 function nextSlide() { showSlide(currentIndex + 1); }
+                 function prevSlide() { showSlide(currentIndex - 1); }
+                 function startAutoPlay() {
+                     if(autoPlayInterval) clearInterval(autoPlayInterval);
+                     if (slides.length > 1) autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+                 }
+                  function stopAutoPlay() { if(autoPlayInterval) clearInterval(autoPlayInterval); }
+
+                 // 确保按钮存在
+                 if(nextBtn) nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
+                 if(prevBtn) prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
+                 
+                 if(!isMobile && slides.length > 1 && heroSection) {
+                    heroSection.addEventListener('mouseenter', stopAutoPlay);
+                    heroSection.addEventListener('mouseleave', startAutoPlay);
+                  }
+                 startAutoPlay(); 
+                 showSlide(0); // === 修复: 确保初始显示 ===
+            } 
+            
+            // --- Typewriter Logic ---
+            if(typewriterEl && cursorEl) {
+                 const phrases = ["统一访问主流 AI 模型", "极速稳定，弹性计费", "一键集成，简化开发流程"];
+                 let phraseIndex = 0, charIndex = 0, isDeleting = false;
+                 const typingSpeed = 100, deletingSpeed = 50, pauseDuration = 1800;
+                 function type() {
+                    if (!cursorEl || !typewriterEl) return; // 防御
+                    cursorEl.style.animation = 'blink 0.7s infinite'; 
+                    const currentPhrase = phrases[phraseIndex % phrases.length];
+                    let delay = isDeleting ? deletingSpeed : typingSpeed;
+                     typewriterEl.textContent = currentPhrase.substring(0, charIndex);
+                    if (!isDeleting && charIndex < currentPhrase.length) { charIndex++;
+                    } else if (isDeleting && charIndex > 0) { charIndex--;
+                    } else if (!isDeleting && charIndex === currentPhrase.length) {
+                         delay = pauseDuration; isDeleting = true; cursorEl.style.animation = 'none';
+                    } else if (isDeleting && charIndex === 0) {
+                         isDeleting = false; phraseIndex++; delay = 400;
+                     }
+                     if(document.body.contains(typewriterEl)) setTimeout(type, delay);
+                 }
+                setTimeout(type, 500); 
+            }
+
+            // --- Scroll Reveal Logic ---
+            if(revealElements.length > 0){
+                 const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                         const deco2 = entry.target.querySelector('.deco-2'); // 获取可能的deco-2
+                         if (entry.isIntersecting) {
+                             entry.target.classList.add('is-visible');
+                              // 特殊处理 deco-2 transform
+                              if(deco2) deco2.style.transform = 'translateY(-50%) translateX(0)';
+                             observer.unobserve(entry.target); 
+                         }
+                    });
+                 }, { root: null, threshold: 0.01, rootMargin: "0px 0px -80px 0px" });
+
+                 revealElements.forEach(el => {
+                    // 初始化 deco-2 transform
+                     const deco2 = el.querySelector('.deco-2');
+                     if(deco2) deco2.style.transform = 'translateY(-50%) translateX(-40px)';
+                    revealObserver.observe(el)
+                 });
+            }
+
+             // --- 新增: Button Spotlight Logic ---
+             buttons.forEach(button => {
+                button.addEventListener('mousemove', (e) => {
+                    const rect = button.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    button.style.setProperty('--mouse-x', `${x}px`);
+                    button.style.setProperty('--mouse-y', `${y}px`);
+                });
+                 // 鼠标移出时恢复中心点，配合CSS transition实现平滑返回
+                 button.addEventListener('mouseleave', (e) => {
+                     button.style.setProperty('--mouse-x', `50%`);
+                     button.style.setProperty('--mouse-y', `50%`);
+                 });
+            });
+
+
+            // --- Parallax Logic (Kanban) ---
+             let animationFrameRequested = false;
+             function handleScroll() {
+                  if (animationFrameRequested) return;
+                   animationFrameRequested = true;
+                   requestAnimationFrame(() => {
+                        const scrollY = window.scrollY;
+                        const viewportWidth = window.innerWidth;
+                        // 左
+                        if (kanbanGirl && viewportWidth > 900) { 
+                           const speed = parseFloat(kanbanGirl.dataset.scrollSpeed) || 0.06;
+                           kanbanGirl.style.transform = `translateY(calc(-50% - ${scrollY * speed}px))`;
+                        } else if(kanbanGirl) {
+                           kanbanGirl.style.transform = `translateY(-50%)`; 
+                        }
+                        // 右
+                         if (kanbanGirlRight && viewportWidth > 900) {
+                           const speedR = parseFloat(kanbanGirlRight.dataset.scrollSpeed) || -0.05; 
+                           kanbanGirlRight.style.transform = `translateY(${ - scrollY * speedR}px)`;
+                        } else if(kanbanGirlRight) {
+                            kanbanGirlRight.style.transform = `translateY(0%)`;
+                        }
+                         animationFrameRequested = false;
+                   });
+             }
+
+             window.addEventListener('scroll', handleScroll, { passive: true }); 
+             window.addEventListener('resize', handleScroll, { passive: true }); // 窗口变化时也调整
+             handleScroll(); // 初始调用
+
+        }); // end DOMContentLoaded
+    </script>
+     <!-- JavaScript 脚本结束 -->
+</body>
+</html>
