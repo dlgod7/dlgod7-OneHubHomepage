@@ -9,411 +9,184 @@
 
     <!-- CSS 样式开始 -->
     <style>
-        /* === 基础和重置 === */
         :root {
-            --primary-color: #8a2be2; /* 调整：更鲜艳的紫 */
-            --secondary-color: #00bfff; /* 调整：天蓝 */
-            --accent-color: #ff69b4; /* 新增：热粉 */
-             --cyan-color: #00ffff; /* 新增：青色 */
-            --text-color: #1a202c;
-            --light-text-color: #4a5568;
-            --glass-bg: rgba(255, 255, 255, 0.30);
-             --glass-bg-hero: rgba(255, 255, 255, 0.20); /* 英雄区卡片更透明 */
-            --glass-border: rgba(255, 255, 255, 0.45);
-            --glass-hover-bg: rgba(255, 255, 255, 0.45);
-             --card-shadow: 0 8px 32px rgba(99, 38, 188, 0.12); /* 阴影带颜色 */
-            --blur: 15px; /* 模糊度增加 */
+            --primary-color: #8a2be2; --secondary-color: #00bfff; --accent-color: #ff69b4; --cyan-color: #00ffff;
+            --text-color: #1a202c; --light-text-color: #4a5568;
+            --glass-bg: rgba(255, 255, 255, 0.30); --glass-bg-hero: rgba(255, 255, 255, 0.20);
+            --glass-border: rgba(255, 255, 255, 0.45); --glass-hover-bg: rgba(255, 255, 255, 0.45);
+            --card-shadow: 0 8px 32px rgba(99, 38, 188, 0.12); --blur: 15px;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-             scroll-behavior: smooth;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Microsoft YaHei";
-            background-color: #f0f2ff; /* 更偏蓝的浅色 */
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-             position: relative;
-             min-height: 100vh;
+            background-color: #f0f2ff; color: var(--text-color); line-height: 1.6; overflow-x: hidden; position: relative; min-height: 100vh;
         }
-        
-        /* === 动态光晕背景 - 增强 === */
-         .aura-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-            filter: blur(90px); /* 增加模糊 */
-             opacity: 0.85;
-         }
-        .aura-blob {
-             position: absolute;
-             border-radius: 50%;
-             mix-blend-mode: overlay;
-              animation: moveBlob 25s infinite alternate linear;
-         }
-          .aura-blob:nth-child(1) { width: 600px; height: 600px; background: rgba(168, 134, 250, 0.7); top: -10%; left: -10%;}
-           .aura-blob:nth-child(2) { width: 700px; height: 700px; background: rgba(134, 206, 250, 0.7); bottom: -20%; right: -15%; animation-duration: 30s; animation-delay: -5s;}
-            .aura-blob:nth-child(3) { width: 500px; height: 500px; background: rgba(255, 105, 180, 0.5); /* 粉色 */ top: 50%; left: 40%; animation-duration: 35s; animation-delay: -10s;}
-             /* 新增光斑 */
-            .aura-blob:nth-child(4) { width: 400px; height: 400px; background: rgba(0, 255, 255, 0.4); /* 青色 */ top: 10%; right: 10%; animation-duration: 20s; animation-delay: -2s;}
-             .aura-blob:nth-child(5) { width: 300px; height: 300px; background: rgba(200, 160, 255, 0.6); bottom: 10%; left: 20%; animation-duration: 40s; animation-delay: -15s;}
-         @keyframes moveBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(100px, -50px) scale(1.2); }
-             100% { transform: translate(-50px, 100px) scale(0.9); }
-         }
-
-
-        /* === 布局 === */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 20px;
-             position: relative; 
-             z-index: 2;
-        }
-         main {
-             padding-left: 100px; 
-         }
-
-        section {
-            margin-bottom: 100px;
-             padding-top: 20px;
-        }
-         /* 标题增强：光晕 */
+         .aura-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; filter: blur(90px); opacity: 0.85; }
+        .aura-blob { position: absolute; border-radius: 50%; mix-blend-mode: overlay; animation: moveBlob 25s infinite alternate linear;}
+        .aura-blob:nth-child(1) { width: 600px; height: 600px; background: rgba(168, 134, 250, 0.7); top: -10%; left: -10%;}
+        .aura-blob:nth-child(2) { width: 700px; height: 700px; background: rgba(134, 206, 250, 0.7); bottom: -20%; right: -15%; animation-duration: 30s; animation-delay: -5s;}
+        .aura-blob:nth-child(3) { width: 500px; height: 500px; background: rgba(255, 105, 180, 0.5); top: 50%; left: 40%; animation-duration: 35s; animation-delay: -10s;}
+        .aura-blob:nth-child(4) { width: 400px; height: 400px; background: rgba(0, 255, 255, 0.4); top: 10%; right: 10%; animation-duration: 20s; animation-delay: -2s;}
+        .aura-blob:nth-child(5) { width: 300px; height: 300px; background: rgba(200, 160, 255, 0.6); bottom: 10%; left: 20%; animation-duration: 40s; animation-delay: -15s;}
+        @keyframes moveBlob { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(100px, -50px) scale(1.2); } 100% { transform: translate(-50px, 100px) scale(0.9); }}
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 2;}
+        main { padding-left: 100px; }
+        section { margin-bottom: 100px; padding-top: 20px; }
         section h2 {
-             text-align: center;
-             margin-bottom: 60px;
-             font-size: 2.3em;
-             font-weight: 700;
-             color: var(--primary-color);
-              background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-               text-shadow: 0 0 8px rgba(138, 43, 226, 0.3), 0 0 15px rgba(0, 191, 255, 0.2); /* 新增：光晕 */
+             text-align: center; margin-bottom: 60px; font-size: 2.3em; font-weight: 700; color: var(--primary-color);
+             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+             text-shadow: 0 0 8px rgba(138, 43, 226, 0.3), 0 0 15px rgba(0, 191, 255, 0.2);
         }
-
-        /* === 亚克力效果 - 增强 === */
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--blur));
-            -webkit-backdrop-filter: blur(var(--blur));
-            border-radius: 18px;
-            border: 1px solid var(--glass-border);
-             box-shadow: var(--card-shadow);
-            padding: 30px;
-             transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--glass-bg); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+            border-radius: 18px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow); padding: 30px;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
-         .glass-card:hover {
-             background: var(--glass-hover-bg);
-              box-shadow: var(--card-shadow), 0 0 20px rgba(255,255,255, 0.3);
-         }
-         /* 针对网格卡片的hover效果: 内发光+上浮 */
-          .card-grid .glass-card:hover {
-               transform: translateY(-8px); 
-                box-shadow: var(--card-shadow), 0 15px 30px rgba(99, 38, 188, 0.15), inset 0 0 15px rgba(255,255,255,0.5); /* 新增：内发光和更强阴影 */
-           }
-
-        /* === 按钮效果 - 增强 === */
+        .glass-card:hover { background: var(--glass-hover-bg); box-shadow: var(--card-shadow), 0 0 20px rgba(255,255,255, 0.3); }
+        .card-grid .glass-card:hover { transform: translateY(-8px); box-shadow: var(--card-shadow), 0 15px 30px rgba(99, 38, 188, 0.15), inset 0 0 15px rgba(255,255,255,0.5);}
         .glow-button {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-             text-decoration: none;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-            animation: glow 3s infinite ease-in-out; /* 加快呼吸 */
-             margin: 0 10px;
-             display: inline-block;
-              text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); color: white; padding: 12px 30px; border: none; border-radius: 50px;
+            font-size: 1.1em; font-weight: 600; cursor: pointer; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            animation: glow 3s infinite ease-in-out; margin: 0 10px; display: inline-block; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
-         .glow-button:hover {
-            transform: scale(1.08);
-             animation-play-state: paused;
-             box-shadow: 0 0 20px var(--primary-color), 0 0 35px var(--secondary-color); /* 更强光晕 */
-              background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
-         }
-         @keyframes glow {
-           0%, 100% { box-shadow: 0 0 8px rgba(138, 43, 226, 0.5); }
-           50% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(0, 191, 255, 0.5); }
-         }
-
-        /* === 滚动入场动画 === */
-         .scroll-reveal {
-            opacity: 0;
-            transform: translateY(60px);
-            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            will-change: opacity, transform;
-         }
-         .scroll-reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-         }
-         .card-grid .glass-card:nth-child(2) { transition-delay: 0.15s; }
-         .card-grid .glass-card:nth-child(3) { transition-delay: 0.3s; }
-
-
-        /* === 看板娘 - 增强：发光 === */
-        .kanban-girl {
-            position: fixed;
-            left: 1.5vw;
-            top: 50%;
-             transform: translateY(-50%);
-            z-index: 1; 
-             pointer-events: none; 
-             transition: transform 0.05s linear; 
-             max-width: 180px;
-             max-height: 70vh;
-             will-change: transform;
-        }
-         .kanban-girl img {
-             width: 100%;
-             height: auto;
-              display: block;
-               animation: girlGlow 6s infinite ease-in-out; /* 新增：发光动画 */
-          }
-           /* 新增：看板娘发光动画 */
-         @keyframes girlGlow {
-           0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)) drop-shadow(0 0 5px rgba(168, 134, 250, 0)); }
-           50% { filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 20px rgba(180, 134, 255, 0.7)); }
-         }
-
-
-        /* === 英雄区域 & 轮播图 === */
+        .glow-button:hover { transform: scale(1.08); animation-play-state: paused; box-shadow: 0 0 20px var(--primary-color), 0 0 35px var(--secondary-color); background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));}
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 8px rgba(138, 43, 226, 0.5); } 50% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(0, 191, 255, 0.5); }}
+        .scroll-reveal { opacity: 0; transform: translateY(60px); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: opacity, transform;}
+        .scroll-reveal.is-visible { opacity: 1; transform: translateY(0); }
+        .card-grid .glass-card:nth-child(2) { transition-delay: 0.15s; }
+        .card-grid .glass-card:nth-child(3) { transition-delay: 0.3s; }
+        .kanban-girl { position: fixed; left: 1.5vw; top: 50%; transform: translateY(-50%); z-index: 1; pointer-events: none; transition: transform 0.05s linear; max-width: 180px; max-height: 70vh; will-change: transform;}
+        .kanban-girl img { width: 100%; height: auto; display: block; animation: girlGlow 6s infinite ease-in-out; }
+        @keyframes girlGlow { 0%, 100% { filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)) drop-shadow(0 0 5px rgba(168, 134, 250, 0)); } 50% { filter: drop-shadow(0 8px 15px rgba(0,0,0,0.15)) drop-shadow(0 0 20px rgba(180, 134, 255, 0.7)); }}
         #hero {
-             position: relative;
-            height: 85vh;
-            min-height: 500px;
-            max-height: 800px;
-            overflow: hidden;
-            border-radius: 20px;
-             box-shadow: var(--card-shadow);
-             margin-bottom: 120px;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             border: 1px solid var(--glass-border);
-              background-color: #eef; 
+             position: relative; height: 85vh; min-height: 500px; max-height: 800px; overflow: hidden; border-radius: 20px; box-shadow: var(--card-shadow);
+             margin-bottom: 120px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); background-color: #eef; 
         }
         .slider { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;}
         .slide { position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; transform: scale(1.1); visibility: hidden;}
         .slide.active { opacity: 1; transform: scale(1); visibility: visible;}
         .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.95);}
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(240, 242, 255, 0.1); z-index: 2;}
-
          .hero-content {
-            position: relative;
-            z-index: 4;
-            text-align: center;
-            padding: 40px 35px;
-             max-width: 75%;
-             margin: auto;
-             background: var(--glass-bg-hero); 
-             backdrop-filter: blur(12px); 
-             -webkit-backdrop-filter: blur(12px);
-              border-radius: 18px;
-              border: 1px solid var(--glass-border);
-              box-shadow: var(--card-shadow);
-               transition: background 0.3s ease, box-shadow 0.3s ease;
+            position: relative; z-index: 4; text-align: center; padding: 40px 35px; max-width: 75%; margin: auto;
+            background: var(--glass-bg-hero); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-radius: 18px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow); transition: background 0.3s ease, box-shadow 0.3s ease;
         }
-          .hero-content:hover {
-              background: rgba(255, 255, 255, 0.30);
-               box-shadow: var(--card-shadow), inset 0 0 15px rgba(255,255,255,0.5);
-          }
-         .hero-content h1 {
-            font-size: 4.5em;
-            font-weight: 800;
-            margin-bottom: 15px;
-              color: var(--primary-color);
-               text-shadow: 0px 0px 10px rgba(255,255,255,0.8), 2px 2px 5px rgba(0,0,0,0.1); /* 增强阴影 */
-         }
-         .hero-content .subtitle {
-            font-size: 1.6em;
-            color: var(--light-text-color);
-            margin-bottom: 35px;
-            min-height: 1.8em;
-             font-weight: 500;
-             text-shadow: 0px 0px 8px rgba(255,255,255,0.8), 1px 1px 3px rgba(0,0,0,0.1); /* 增强阴影 */
-         }
-         .cursor { display: inline-block; background-color: var(--secondary-color); margin-left: 2px; width: 3px; height: 1.1em; vertical-align: text-bottom; animation: blink 0.7s infinite;}
-         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; }}
-
+        .hero-content:hover { background: rgba(255, 255, 255, 0.30); box-shadow: var(--card-shadow), inset 0 0 15px rgba(255,255,255,0.5); }
+        .hero-content h1 { font-size: 4.5em; font-weight: 800; margin-bottom: 15px; color: var(--primary-color); text-shadow: 0px 0px 10px rgba(255,255,255,0.8), 2px 2px 5px rgba(0,0,0,0.1);}
+        .hero-content .subtitle { font-size: 1.6em; color: var(--light-text-color); margin-bottom: 35px; min-height: 1.8em; font-weight: 500; text-shadow: 0px 0px 8px rgba(255,255,255,0.8), 1px 1px 3px rgba(0,0,0,0.1);}
+        .cursor { display: inline-block; background-color: var(--secondary-color); margin-left: 2px; width: 3px; height: 1.1em; vertical-align: text-bottom; animation: blink 0.7s infinite;}
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; }}
          .nav-arrow {
              position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; background: var(--glass-bg); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
              border: 1px solid var(--glass-border); color: var(--primary-color); font-size: 2em; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; opacity: 0;
-             transition: opacity 0.4s ease, background 0.3s ease, color 0.3s ease; display: flex; align-items: center; justify-content: center; padding-bottom: 2px; user-select: none;
+             transition: opacity 0.4s ease, background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; display: flex; align-items: center; justify-content: center; padding-bottom: 2px; user-select: none;
          }
-          .nav-arrow:hover { background: var(--glass-hover-bg); color: var(--accent-color); box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);}
-         #hero:hover .nav-arrow { opacity: 0.9; }
-         .nav-arrow.prev { left: 20px; padding-right: 3px;}
-         .nav-arrow.next { right: 20px; padding-left: 3px;}
-
-        /* === 卡片网格 - 增强：图标 === */
-         .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 35px;
+        .nav-arrow:hover { background: var(--glass-hover-bg); color: var(--accent-color); box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);}
+        #hero:hover .nav-arrow { opacity: 0.9; }
+        .nav-arrow.prev { left: 20px; padding-right: 3px;}
+        .nav-arrow.next { right: 20px; padding-left: 3px;}
+        
+        /* 新增：制作者徽章 */
+         .creator-badge {
+            position: absolute; bottom: 25px; right: 30px; z-index: 5;
+            font-size: 0.85em; padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(99, 38, 188, 0.08);
+            pointer-events: none; opacity: 0.95;
          }
-         .card-grid .glass-card {
-             text-align: center;
-             padding: 40px 25px;
-         }
-          /* 新增：图标样式 */
-          .card-grid .fa-solid, .card-grid .fas {
-              font-size: 2.8em;
-              margin-bottom: 20px;
-              color: var(--secondary-color);
-               background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-                -webkit-background-clip: text;
-               -webkit-text-fill-color: transparent;
-                display: block;
-          }
-          .card-grid h3 {
-             font-size: 1.5em;
-             margin-bottom: 15px;
-             color: var(--primary-color);
-          }
-           .card-grid p { font-size: 1em; color: var(--light-text-color);}
-           .steps .glass-card { position: relative; padding-top: 60px; }
-            .steps .step-number {
-               position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 50px; height: 50px;
-               background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-                border-radius: 50%; color: white; font-size: 1.5em; font-weight: bold; display: flex;
-                align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); border: 3px solid white;
-            }
-             /* 步骤卡隐藏图标 */
-            .steps .fa-solid, .steps .fas { display: none;}
 
-
-        /* === 表格 - 增强 === */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 35px; }
+        .card-grid .glass-card { text-align: center; padding: 40px 25px; }
+        .card-grid .fa-solid, .card-grid .fas {
+              font-size: 2.8em; margin-bottom: 20px; color: var(--secondary-color);
+              background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+              -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block;
+        }
+        .card-grid h3 { font-size: 1.5em; margin-bottom: 15px; color: var(--primary-color); }
+        .card-grid p { font-size: 1em; color: var(--light-text-color);}
+        .steps .glass-card { position: relative; padding-top: 60px; }
+        .steps .step-number {
+             position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 50px; height: 50px;
+             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border-radius: 50%; color: white; font-size: 1.5em; font-weight: bold; display: flex;
+             align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); border: 3px solid white;
+        }
+        .steps .fa-solid, .steps .fas { display: none;}
         .table-container { padding: 20px 30px; overflow-x: auto;}
         .table-container h3 {
             margin-top: 45px; margin-bottom: 15px; color: var(--primary-color); font-size: 1.4em;
-            /* 渐变下划线 */
-            border-bottom: 2px solid;
-             border-image: linear-gradient(to right, var(--primary-color), var(--secondary-color), transparent) 1;
-             padding-bottom: 8px; display: inline-block; padding-right: 20px;
+            border-bottom: 2px solid; border-image: linear-gradient(to right, var(--primary-color), var(--secondary-color), transparent) 1;
+            padding-bottom: 8px; display: inline-block; padding-right: 20px;
         }
-         .table-container h3:first-of-type { margin-top: 15px; }
-          .table-note { margin-top: 25px; font-size: 0.9em; color: var(--light-text-color); text-align: right; font-style: italic; opacity: 0.9;}
+        .table-container h3:first-of-type { margin-top: 15px; }
+        .table-note { margin-top: 25px; font-size: 0.9em; color: var(--light-text-color); text-align: right; font-style: italic; opacity: 0.9;}
         table { width: 100%; border-collapse: separate; border-spacing: 0; background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
-         th, td { padding: 12px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.3); font-size: 0.95em;}
-          th { background: rgba(255,255,255,0.25); color: var(--text-color); font-weight: 600; position: sticky; top: 0; font-size: 1em;}
-          tr:last-child td { border-bottom: none;}
-           /* 悬停增强 */
-           tbody tr:hover {
-              background: rgba(255,255,255,0.35);
-               box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
-           }
-            /* 价格列增强：青色+微光 */
-            td.price-col {
-                font-weight: 600;
-                 color: var(--cyan-color);
-                  text-shadow: 0 0 4px rgba(0, 255, 255, 0.4);
-            }
-
-        /* === 页脚 - 增强：闪光字 === */
+        th, td { padding: 12px 18px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.3); font-size: 0.95em;}
+        th { background: rgba(255,255,255,0.25); color: var(--text-color); font-weight: 600; position: sticky; top: 0; font-size: 1em;}
+        tr:last-child td { border-bottom: none;}
+        tbody tr:hover { background: rgba(255,255,255,0.35); box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
+        td.price-col { font-weight: 600; color: var(--cyan-color); text-shadow: 0 0 4px rgba(0, 255, 255, 0.4); }
         footer { text-align: center; padding: 40px 20px; margin-top: 80px; color: var(--light-text-color); font-size: 0.9em; position: relative; z-index: 2;}
         footer .glass-card { display: inline-block; padding: 15px 35px; box-shadow: none; background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.2); transition: all 0.3s ease;}
-         footer .glass-card:hover { transform: none; background: rgba(255, 255, 255, 0.25); box-shadow: var(--card-shadow);}
-          /* 新增：闪光字体 */
+        footer .glass-card:hover { transform: none; background: rgba(255, 255, 255, 0.25); box-shadow: var(--card-shadow);}
          .sparkle-text {
-            font-weight: bold;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color), var(--cyan-color));
-             background-size: 200% auto;
-             -webkit-background-clip: text;
-             -webkit-text-fill-color: transparent;
-             animation: sparkleGradient 5s linear infinite, sparkleGlow 3s ease-in-out infinite alternate;
-          }
-           @keyframes sparkleGradient {
-              to { background-position: 200% center; }
-           }
-           @keyframes sparkleGlow {
-             from { text-shadow: 0 0 2px #fff, 0 0 5px var(--primary-color); }
-              to { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 15px var(--secondary-color); }
-           }
-            footer p {
-               white-space: nowrap; /* 防止换行 */
-            }
+            font-weight: bold; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color), var(--cyan-color));
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: sparkleGradient 5s linear infinite, sparkleGlow 3s ease-in-out infinite alternate;
+         }
+        @keyframes sparkleGradient { to { background-position: 200% center; }}
+        @keyframes sparkleGlow { from { text-shadow: 0 0 2px #fff, 0 0 5px var(--primary-color); } to { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent-color), 0 0 15px var(--secondary-color); }}
+        footer p { white-space: nowrap;}
 
-
-        /* === 响应式设计 === */
         @media (max-width: 900px) {
             .kanban-girl { left: -50px; max-width: 120px; }
              main { padding-left: 20px; }
-             .hero-content h1 { font-size: 3em;}
-             .hero-content .subtitle { font-size: 1.2em;}
-             .hero-content { max-width: 85%; padding: 30px;}
-             .glow-button { padding: 10px 20px; font-size: 1em;}
-             section h2 {font-size: 1.8em;}
-             .table-container { padding: 15px;}
-             th, td { padding: 10px 12px; font-size: 0.9em;}
-             th { font-size: 0.95em;}
+             .hero-content h1 { font-size: 3em;} .hero-content .subtitle { font-size: 1.2em;}
+             .hero-content { max-width: 85%; padding: 30px;} .glow-button { padding: 10px 20px; font-size: 1em;}
+             section h2 {font-size: 1.8em;} .table-container { padding: 15px;}
+             th, td { padding: 10px 12px; font-size: 0.9em;} th { font-size: 0.95em;}
         }
          @media (max-width: 600px) {
-             .kanban-girl { display: none;}
-              main { padding-left: 0; }
-             .hero-content h1 { font-size: 2.5em; }
-             .hero-content .subtitle { font-size: 1.1em; min-height: 2em; margin-bottom: 20px;}
-             .hero-content { max-width: 90%; padding: 25px 15px; }
-             .hero-buttons { display: flex; flex-direction: column; align-items: center;}
+             .kanban-girl { display: none;} main { padding-left: 0; }
+             .hero-content h1 { font-size: 2.5em; } .hero-content .subtitle { font-size: 1.1em; min-height: 2em; margin-bottom: 20px;}
+             .hero-content { max-width: 90%; padding: 25px 15px; } .hero-buttons { display: flex; flex-direction: column; align-items: center;}
              .glow-button { margin: 8px 0; width: 80%; font-size: 0.95em;}
-             .nav-arrow { width: 35px; height: 35px; font-size: 1.4em; opacity: 0.7 !important;}
-             .nav-arrow.prev { left: 8px;}
-             .nav-arrow.next { right: 8px;}
-             #hero { height: 55vh; min-height: 420px; margin-bottom: 80px;}
-             section { margin-bottom: 70px;}
-             section h2 { margin-bottom: 50px;}
-             .card-grid { gap: 50px 20px;}
-              .card-grid .fa-solid, .card-grid .fas { font-size: 2.2em;}
-               footer p { white-space: normal; line-height: 1.8;} /* 手机允许换行 */
-               .sparkle-text { display: inline-block; margin-top: 5px;}
+             .nav-arrow { width: 35px; height: 35px; font-size: 1.4em; opacity: 0.7 !important;} .nav-arrow.prev { left: 8px;} .nav-arrow.next { right: 8px;}
+             #hero { height: 55vh; min-height: 420px; margin-bottom: 80px;} section { margin-bottom: 70px;} section h2 { margin-bottom: 50px;}
+             .card-grid { gap: 50px 20px;} .card-grid .fa-solid, .card-grid .fas { font-size: 2.2em;}
+             footer p { white-space: normal; line-height: 1.8;} .sparkle-text { display: inline-block; margin-top: 5px;}
+             /* 手机端徽章位置 */
+              .creator-badge { bottom: 12px; right: 12px; font-size: 0.75em; padding: 4px 10px; }
          }
     </style>
     <!-- CSS 样式结束 -->
 </head>
 
 <body>
-     <!-- 动态背景 -->
     <div class="aura-background">
-       <div class="aura-blob"></div>
-        <div class="aura-blob"></div>
-         <div class="aura-blob"></div>
-          <div class="aura-blob"></div>
-           <div class="aura-blob"></div>
-     </div>
+       <div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div><div class="aura-blob"></div>
+    </div>
 
-    <!-- 视差滚动看板娘 -->
+    <!-- 看板娘：保持原图，因blob链接无法使用 -->
     <div class="kanban-girl" id="kanbanGirl" data-scroll-speed="0.08">
          <img src="https://816516.xyz/PicGo/%E4%B8%9B%E9%9B%A8%20(1).jpg" alt="OneHub 看板娘">
      </div>
 
    <main>
     <div class="container">
-
-        <!-- 1. 英雄区域 Hero Section -->
+        <!-- 1. 英雄区域 Hero Section - 更新图片，增加徽章 -->
         <section id="hero" class="scroll-reveal is-visible"> 
            <div class="slider" id="sliderContainer">
-                <div class="slide active"><img src="https://816516.xyz/PicGo/%E4%B8%9B%E9%9B%A8%20(2).jpg" alt="背景图1"></div>
-                <div class="slide"><img src="https://816516.xyz/PicGo/%E7%99%BD%E7%8E%89%C2%B7%E6%A8%B1%E8%8A%B1.jpg" alt="背景图2"></div>
-                 <div class="slide"><img src="https://816516.xyz/PicGo/%E7%99%BD%E7%8E%89%C2%B7%E6%B0%B4%E7%8C%AB.jpg" alt="背景图3"></div>
+                <!-- 图片已替换为新地址，共5张 -->
+                <div class="slide active"><img src="https://th.bing.com/th/id/R.f30fbf5ea4a1b2a57cb00f8d2eb1a3bd?rik=mAk2UYD%2fctcukw&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2f6b1305f9e98fe337a9896165d25a445b6a1072d2.jpg&ehk=jno%2fCsn8fiA6orsxa90I4dAgeDkCWFPjR%2fP4sO2%2fwTQ%3d&risl=&pid=ImgRaw&r=0" alt="背景图1 猫耳少女"></div>
+                <div class="slide"><img src="https://th.bing.com/th/id/OIP.QkFLyvk8W4jtWzx9LDJE_QHaEo?pid=1.7" alt="背景图2 贴贴"></div>
+                 <div class="slide"><img src="https://th.bing.com/th/id/OIP.O85CYMtw_Jh3eBJS9pNzLwHaEo?pid=1.7" alt="背景图3 飞行器"></div>
+                 <div class="slide"><img src="https://th.bing.com/th/id/OIP.MOom5m-nVzdGqxuhN87gygHaEK?pid=1.7" alt="背景图4 星空列车"></div>
+                  <div class="slide"><img src="https://th.bing.com/th/id/OIP.Q8c0yVp9fbryo1vPTgHe5QHaEK?pid=1.7" alt="背景图5 海边烟花"></div>
            </div>
             <div class="hero-overlay"></div> 
            <div class="hero-content">
@@ -426,52 +199,29 @@
            </div>
             <button class="nav-arrow prev" id="prevBtn" aria-label="上一张">❮</button>
             <button class="nav-arrow next" id="nextBtn" aria-label="下一张">❯</button>
+             <!-- 新增：制作者徽章 -->
+            <div class="creator-badge">
+                 <span class="sparkle-text">由站长 dlgod7 制作</span>
+             </div>
         </section>
 
-        <!-- 2. 核心优势 Features - 增加图标 -->
+        <!-- 2. 核心优势 Features -->
          <section id="features" class="scroll-reveal">
             <h2>核心优势</h2>
             <div class="card-grid">
-                <div class="glass-card">
-                    <i class="fas fa-plug"></i>
-                    <h3>统一访问</h3>
-                     <p>兼容标准接口，一站式接入全球主流大语言模型、绘图模型，极大简化开发集成工作。</p>
-                </div>
-                 <div class="glass-card">
-                    <i class="fas fa-route"></i>
-                    <h3>智能分发</h3>
-                    <p>内置智能负载均衡与容灾策略，自动路由请求，保障服务高并发下的稳定与高可用性。</p>
-                </div>
-                 <div class="glass-card">
-                     <i class="fas fa-chart-line"></i>
-                    <h3>数据洞察</h3>
-                     <p>提供详细的请求日志、消耗明细和可视化统计报表，让模型用量和成本一目了然。</p>
-                 </div>
+                <div class="glass-card"> <i class="fas fa-plug"></i><h3>统一访问</h3><p>兼容标准接口，一站式接入全球主流大语言模型、绘图模型，极大简化开发集成工作。</p></div>
+                 <div class="glass-card"><i class="fas fa-route"></i><h3>智能分发</h3><p>内置智能负载均衡与容灾策略，自动路由请求，保障服务高并发下的稳定与高可用性。</p></div>
+                 <div class="glass-card"><i class="fas fa-chart-line"></i><h3>数据洞察</h3><p>提供详细的请求日志、消耗明细和可视化统计报表，让模型用量和成本一目了然。</p></div>
             </div>
          </section>
 
-         <!-- 3. 快速上手 Quick Start - 增加图标 -->
+         <!-- 3. 快速上手 Quick Start -->
           <section id="quick-start" class="scroll-reveal">
              <h2>快速上手</h2>
               <div class="card-grid steps">
-                 <div class="glass-card">
-                     <span class="step-number">1</span>
-                      <i class="fas fa-user-plus"></i>
-                     <h3>注册登录</h3>
-                      <p>快速创建或登录您的 OneHub 账户，进入控制台。</p>
-                 </div>
-                  <div class="glass-card">
-                      <span class="step-number">2</span>
-                       <i class="fas fa-key"></i>
-                     <h3>获取令牌</h3>
-                     <p>在控制台创建您的专属 API Key，并按需配置访问额度。</p>
-                 </div>
-                  <div class="glass-card">
-                       <span class="step-number">3</span>
-                        <i class="fas fa-code"></i>
-                      <h3>对接使用</h3>
-                      <p>参照简洁的API文档，将 Key 快速集成到您的各类应用中。</p>
-                  </div>
+                 <div class="glass-card"><span class="step-number">1</span><i class="fas fa-user-plus"></i><h3>注册登录</h3><p>快速创建或登录您的 OneHub 账户，进入控制台。</p></div>
+                  <div class="glass-card"><span class="step-number">2</span><i class="fas fa-key"></i><h3>获取令牌</h3><p>在控制台创建您的专属 API Key，并按需配置访问额度。</p></div>
+                  <div class="glass-card"><span class="step-number">3</span><i class="fas fa-code"></i><h3>对接使用</h3><p>参照简洁的API文档，将 Key 快速集成到您的各类应用中。</p></div>
              </div>
           </section>
 
@@ -525,10 +275,10 @@
     </div>
     </main>
     
-     <!-- 页脚 - 增加闪光字 -->
+     <!-- 页脚 - 移除制作信息 -->
     <footer>
        <div class="glass-card">
-         <p>© 2025 OneHub. All Rights Reserved. | 由 <span class="sparkle-text">dlgod7</span> 制作</p>
+         <p>© 2025 OneHub. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -544,10 +294,11 @@
               const kanbanGirl = document.getElementById('kanbanGirl');
                const revealElements = document.querySelectorAll('.scroll-reveal');
 
+           // 轮播图JS无需修改，自动适应slide数量
            if(slides.length > 0 && prevBtn && nextBtn && heroSection) {
                 let currentIndex = 0;
                 let autoPlayInterval = null;
-                const autoPlayDelay = 6000; 
+                const autoPlayDelay = 5000; // 5秒切换
                 const isMobile = window.innerWidth <= 600;
                 function showSlide(index) {
                     index = (index + slides.length) % slides.length; // 循环
@@ -560,13 +311,13 @@
                  function prevSlide() { showSlide(currentIndex - 1); }
                  function startAutoPlay() {
                      if(autoPlayInterval) clearInterval(autoPlayInterval);
-                    autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
+                     if (slides.length > 1) autoPlayInterval = setInterval(nextSlide, autoPlayDelay); // 只有一张图不轮播
                  }
                   function stopAutoPlay() { if(autoPlayInterval) clearInterval(autoPlayInterval); }
 
                  nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
                  prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
-                 if(!isMobile) {
+                 if(!isMobile && slides.length > 1) {
                     heroSection.addEventListener('mouseenter', stopAutoPlay);
                     heroSection.addEventListener('mouseleave', startAutoPlay);
                   }
@@ -580,7 +331,7 @@
                  const typingSpeed = 100, deletingSpeed = 50, pauseDuration = 1800;
                  function type() {
                     cursorEl.style.animation = 'blink 0.7s infinite'; 
-                    const currentPhrase = phrases[phraseIndex];
+                    const currentPhrase = phrases[phraseIndex % phrases.length];
                     let delay = isDeleting ? deletingSpeed : typingSpeed;
                      typewriterEl.textContent = currentPhrase.substring(0, charIndex);
                     if (!isDeleting && charIndex < currentPhrase.length) {
@@ -590,7 +341,7 @@
                     } else if (!isDeleting && charIndex === currentPhrase.length) {
                          delay = pauseDuration; isDeleting = true; cursorEl.style.animation = 'none';
                     } else if (isDeleting && charIndex === 0) {
-                         isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; delay = 400;
+                         isDeleting = false; phraseIndex++; delay = 400;
                      }
                      if(typewriterEl) setTimeout(type, delay);
                  }
